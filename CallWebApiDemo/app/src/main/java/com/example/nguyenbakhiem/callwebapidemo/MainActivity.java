@@ -61,7 +61,16 @@ public class MainActivity extends AppCompatActivity {
     }
     public void searchmeal(View view){
         Intent intent = new Intent(getApplicationContext(),MealActivity.class);
+        int[] arrayId = getListMealId();
+        intent.putExtra("arrayId",arrayId);
         startActivity(intent);
+    }
+    public int[] getListMealId(){
+        int[] arrayId = new int[materialsLv.size()];
+        for (int i = 0 ; i < materialsLv.size(); i ++){
+            arrayId[i] = materialsLv.get(i).getId();
+        }
+        return arrayId;
     }
     private void setAdapter(){
         autoCompleteTextView.setHint("Tìm nguyên liệu");
@@ -80,7 +89,8 @@ public class MainActivity extends AppCompatActivity {
 
                 }
                 else{
-                    materialsLv.add(item);
+                    materials.remove(item);
+                    materialsLv.add(0,item);
                     materialAdapter.update(materialsLv);
                     materialAdapter.notifyDataSetChanged();
                 }
