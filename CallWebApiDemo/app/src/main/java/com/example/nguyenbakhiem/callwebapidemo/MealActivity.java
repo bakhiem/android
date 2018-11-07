@@ -1,5 +1,6 @@
 package com.example.nguyenbakhiem.callwebapidemo;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.AsyncTask;
@@ -17,8 +18,11 @@ import com.google.gson.reflect.TypeToken;
 import org.json.JSONArray;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -31,16 +35,27 @@ public class MealActivity extends AppCompatActivity {
 
     private TextView txtResult;
     private ListView listView;
-
+    int[] materials;
+    private String materialsReceive ="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meal);
         txtResult = (TextView) findViewById(R.id.txtMeal);
         listView = (ListView) findViewById(R.id.listViewMeal);
+        Intent intent = getIntent();
+        materials = intent.getIntArrayExtra("arrayId");
+        for(int i = 0; i < materials.length; i++)
+        {
+            materialsReceive += materials[i];
+            if(i < materials.length - 1)
+            {
+                materialsReceive += ",";
+            }
+        }
         MyTask myTask = new MyTask();
         myTask.execute("", "");
-        //Toast.makeText(this,"move",Toast.LENGTH_LONG).show();
+        Toast.makeText(this,materialsReceive,Toast.LENGTH_LONG).show();
 
     }
 
@@ -85,9 +100,17 @@ public class MealActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
+
             try {
                 URL url = new URL("https://provideapi.herokuapp.com/thoan");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("POST");
+                connection.setDoOutput(true);
+                OutputStream outputStream = connection.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream));
+                writer.write(materialsReceive);
+                writer.flush();
+                outputStream.close();
                 InputStream inputStream = connection.getInputStream();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
                 StringBuilder sb = new StringBuilder();
