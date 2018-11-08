@@ -46,7 +46,7 @@ public class LoginAcitivity extends AppCompatActivity {
     private String uName;
     private String pwd;
     private MyTask myTask;
-    private String token;
+    private String token = "";
     private User user;
     private boolean typeLogin = true;
     private SharedPreferences preferences;
@@ -66,7 +66,7 @@ public class LoginAcitivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Register Success", Toast.LENGTH_LONG).show();
         } else {
             //đã register và từng login remember
-            preferences = getSharedPreferences("tokenLogin", Context.MODE_PRIVATE);
+            preferences = getSharedPreferences("tokenLogin51", Context.MODE_PRIVATE);
             token = preferences.getString("token", "");
 
             if (token.trim().length() > 0) {
@@ -106,7 +106,7 @@ public class LoginAcitivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            if (s.trim().length() > 0) {
+            if (s.trim().length() > 4) {
                 user.setStatusLogin("OK");
                 if (cbRemember.isChecked()) {
                     SharedPreferences.Editor editor = preferences.edit();

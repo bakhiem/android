@@ -2,6 +2,9 @@ package com.example.nguyenbakhiem.callwebapidemo;
 
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -35,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private MaterialAdapter materialAdapter;
 
     private AutoCompleteTextView autoCompleteTextView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
 
         materialAdapter = new MaterialAdapter(this,materialsLv);
         listView.setAdapter(materialAdapter);
+
+
 
 
     }
@@ -147,4 +153,5 @@ public class MainActivity extends AppCompatActivity {
             return "";
         }
     }
+
 }

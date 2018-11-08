@@ -13,12 +13,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -26,6 +28,7 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import adapter.MealAdapter;
@@ -36,8 +39,10 @@ public class MealActivity extends AppCompatActivity {
     private TextView txtResult;
     private ListView listView;
     int[] materials;
-    private String materialsReceive ="{";
+    private String materialsReceive ="[";
     List<Meal> lstMeal ;
+    List<String> listSend;
+    String[] data;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,15 +52,18 @@ public class MealActivity extends AppCompatActivity {
         lstMeal = new ArrayList<>();
         Intent intent = getIntent();
         materials = intent.getIntArrayExtra("arrayId");
+        listSend = new ArrayList<String>();
+        data = new String[materials.length];
         for(int i = 0; i < materials.length; i++)
         {
-            materialsReceive += materials[i];
+            //data[i] = ""+ materials[i]+"";
+            materialsReceive += ""+materials[i]+"";
             if(i < materials.length - 1)
             {
                 materialsReceive += ",";
             }else
             {
-                materialsReceive += "}";
+                materialsReceive += "]";
             }
         }
         MyTask myTask = new MyTask();
@@ -81,7 +89,7 @@ public class MealActivity extends AppCompatActivity {
         }
 
         @Override
-            protected void onPostExecute(String s) {
+        protected void onPostExecute(String s) {
             super.onPostExecute(s);
             JSONArray jsonArray = null;
             try {
@@ -116,11 +124,19 @@ public class MealActivity extends AppCompatActivity {
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.setDoOutput(true);
-                OutputStream outputStream = connection.getOutputStream();
-                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream));
-                writer.write(materialsReceive);
-                writer.flush();
-                outputStream.close();
+                connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
+//                OutputStream outputStream = connection.getOutputStream();
+//                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream));
+//                writer.write(materialsReceive);
+//                writer.flush();
+//                outputStream.close();
+                JSONArray jsonArray = new JSONArray(Arrays.asList(data));
+                JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty("list",materialsReceive);
+                DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
+                wr.writeBytes(jsonObject.toString());
+                wr.flush();
+                wr.close();
                 InputStream inputStream = connection.getInputStream();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
                 StringBuilder sb = new StringBuilder();
@@ -135,4 +151,5 @@ public class MealActivity extends AppCompatActivity {
             return "";
         }
     }
+
 }

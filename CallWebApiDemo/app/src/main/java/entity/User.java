@@ -5,6 +5,7 @@ public class User {
     private String name;
     private String pwd;
     private String statusLogin;
+    private String favoriteMeal;
 
     public static User instance;
     public static User getInstance()
@@ -15,6 +16,15 @@ public class User {
         }
         return instance;
     }
+
+    public String getFavoriteMeal() {
+        return favoriteMeal;
+    }
+
+    public void setFavoriteMeal(String favoriteMeal) {
+        this.favoriteMeal = favoriteMeal;
+    }
+
     public int getId() {
         return id;
     }
