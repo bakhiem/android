@@ -48,7 +48,7 @@ public class MealDetail extends AppCompatActivity {
     public void onStar(View view){
         User user = User.getInstance();
         //imageButton.setImageResource(R.drawable.staron);
-        if(user.getStatusLogin().equalsIgnoreCase("ok")){
+        if(user.getStatusLogin() != null && user.getStatusLogin().equalsIgnoreCase("ok")){
             imageButton.setImageResource(R.drawable.staron);
         }
         else{

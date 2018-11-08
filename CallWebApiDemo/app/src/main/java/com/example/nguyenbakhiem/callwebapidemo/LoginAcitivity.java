@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
@@ -41,9 +42,10 @@ public class LoginAcitivity extends AppCompatActivity {
 
     private String uName;
     private String pwd;
-    MyTask myTask;
+    private MyTask myTask;
+    private String token;
     User user;
-    SharedPreferences preferences;
+    private SharedPreferences preferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,14 +54,25 @@ public class LoginAcitivity extends AppCompatActivity {
         txtPwd = (TextView) findViewById(R.id.txtPwdLogin);
         cbRemember = (CheckBox) findViewById(R.id.cbRemember);
         myTask = new MyTask();
-        preferences = getSharedPreferences("account", Context.MODE_PRIVATE);
-        uName = preferences.getString("username", "");
-        pwd = preferences.getString("password","");
         user = User.getInstance();
-        if(uName.trim().length() >0 && pwd.trim().length()>0)
+        //register sang
+        Intent intent = getIntent();
+        if(intent.getStringExtra("registerSuccess")!= null)
         {
-            myTask.execute("","");
+            Toast.makeText(getApplicationContext(), "Register Success", Toast.LENGTH_LONG).show();
         }
+        else
+        {
+            //đã register và từng login remember
+            preferences = getSharedPreferences("tokenLogin", Context.MODE_PRIVATE);
+            token = preferences.getString("token", "");
+
+            if(token.trim().length() > 0)
+            {
+                myTask.execute(token);
+            }
+        }
+
 
     }
 
@@ -68,6 +81,13 @@ public class LoginAcitivity extends AppCompatActivity {
         uName = txtName.getText().toString();
         pwd = txtPwd.getText().toString();
         myTask.execute(uName,pwd);
+    }
+
+    public void register(View view)
+    {
+        Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     class MyTask extends AsyncTask<String, Void, String> {
@@ -85,14 +105,13 @@ public class LoginAcitivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            if(s.toLowerCase().contains("choco"))
+            if(s.trim().length()>0)
             {
                 user.setStatusLogin("OK");
                 if(cbRemember.isChecked())
                 {
                     SharedPreferences.Editor editor = preferences.edit();
-                    editor.putString("username", uName);
-                    editor.putString("password", pwd);
+                    editor.putString("token", s);
                     editor.commit();
                 }
                 Intent intent = new Intent();
@@ -107,23 +126,47 @@ public class LoginAcitivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... strings) {
             try {
-                URL url = new URL("https://provideapi.herokuapp.com/thoan");
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.setRequestMethod("POST");
-                connection.setDoOutput(true);
-                OutputStream outputStream = connection.getOutputStream();
-                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream));
-                writer.write("username:"+uName+",password:"+pwd);
-                writer.flush();
-                outputStream.close();
-                InputStream inputStream = connection.getInputStream();
-                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-                StringBuilder sb = new StringBuilder();
-                String line = null;
-                while ((line = reader.readLine()) != null) {
-                    sb.append(line);
+                if(strings.length > 1)
+                {
+                    URL url = new URL("https://provideapi.herokuapp.com/thoan");
+                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                    connection.setRequestMethod("POST");
+                    connection.setDoOutput(true);
+                    OutputStream outputStream = connection.getOutputStream();
+                    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream));
+                    writer.write("{username:"+strings[0]+",password:"+strings[1]+"}");
+                    writer.flush();
+                    outputStream.close();
+                    InputStream inputStream = connection.getInputStream();
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                    StringBuilder sb = new StringBuilder();
+                    String line = null;
+                    while ((line = reader.readLine()) != null) {
+                        sb.append(line);
+                    }
+                    return sb.toString();
                 }
-                return sb.toString();
+                else
+                {
+                    URL url = new URL("https://provideapi.herokuapp.com/thoan");
+                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                    connection.setRequestMethod("POST");
+                    connection.setDoOutput(true);
+                    OutputStream outputStream = connection.getOutputStream();
+                    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream));
+                    writer.write("{"+ strings[0]+"}");
+                    writer.flush();
+                    outputStream.close();
+                    InputStream inputStream = connection.getInputStream();
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                    StringBuilder sb = new StringBuilder();
+                    String line = null;
+                    while ((line = reader.readLine()) != null) {
+                        sb.append(line);
+                    }
+                    return sb.toString();
+                }
+
             } catch (Exception e) {
                 e.printStackTrace();
             }

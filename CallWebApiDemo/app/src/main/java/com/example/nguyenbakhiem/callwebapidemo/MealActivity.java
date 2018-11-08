@@ -36,7 +36,7 @@ public class MealActivity extends AppCompatActivity {
     private TextView txtResult;
     private ListView listView;
     int[] materials;
-    private String materialsReceive ="";
+    private String materialsReceive ="{";
     List<Meal> lstMeal ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +53,9 @@ public class MealActivity extends AppCompatActivity {
             if(i < materials.length - 1)
             {
                 materialsReceive += ",";
+            }else
+            {
+                materialsReceive += "}";
             }
         }
         MyTask myTask = new MyTask();

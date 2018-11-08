@@ -28,9 +28,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".MealActivity" />
-        <activity android:name=".LoginAcitivity"></activity>
-        <activity android:name=".MealDetail"></activity>
         <activity android:name=".LoginAcitivity" />
+        <activity android:name=".MealDetail" />
+        <activity android:name=".LoginAcitivity" />
+        <activity android:name=".RegisterActivity"></activity>
     </application>
 
 </manifest>
