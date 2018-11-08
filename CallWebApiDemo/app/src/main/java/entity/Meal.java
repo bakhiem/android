@@ -1,6 +1,8 @@
 package entity;
 
-public class Meal {
+import java.io.Serializable;
+
+public class Meal implements Serializable{
     private int id;
     private String name;
     private String description;
@@ -46,5 +48,10 @@ public class Meal {
 
     public void setImgLink(String imgLink) {
         this.imgLink = imgLink;
+    }
+
+    @Override
+    public String toString() {
+        return this.name + this.description;
     }
 }

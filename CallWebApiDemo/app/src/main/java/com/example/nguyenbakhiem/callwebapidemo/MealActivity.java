@@ -37,12 +37,14 @@ public class MealActivity extends AppCompatActivity {
     private ListView listView;
     int[] materials;
     private String materialsReceive ="";
+    List<Meal> lstMeal ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meal);
         txtResult = (TextView) findViewById(R.id.txtMeal);
         listView = (ListView) findViewById(R.id.listViewMeal);
+        lstMeal = new ArrayList<>();
         Intent intent = getIntent();
         materials = intent.getIntArrayExtra("arrayId");
         for(int i = 0; i < materials.length; i++)
@@ -55,7 +57,7 @@ public class MealActivity extends AppCompatActivity {
         }
         MyTask myTask = new MyTask();
         myTask.execute("", "");
-        Toast.makeText(this,materialsReceive,Toast.LENGTH_LONG).show();
+//        Toast.makeText(this,materialsReceive,Toast.LENGTH_LONG).show();
 
     }
 
@@ -76,13 +78,13 @@ public class MealActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(String s) {
+            protected void onPostExecute(String s) {
             super.onPostExecute(s);
             JSONArray jsonArray = null;
             try {
                 jsonArray = new JSONArray(s);
                 Gson gson = new Gson();
-                List<Meal> lstMeal = new ArrayList<>();
+
                 lstMeal = gson.fromJson(s, new TypeToken<List<Meal>>() { }.getType());
                 MealAdapter mealAdapter = new MealAdapter(MealActivity.this, lstMeal);
                 listView.setAdapter(mealAdapter);
@@ -90,12 +92,17 @@ public class MealActivity extends AppCompatActivity {
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                        sendMealtoDetail(lstMeal.get(position)) ;
                     }
                 });
             } catch (Exception e) {
 
             }
+        }
+        public void sendMealtoDetail(Meal meal){
+            Intent intent = new Intent(MealActivity.this,MealDetail.class);
+            intent.putExtra("meal",meal);
+            startActivity(intent);
         }
 
         @Override
