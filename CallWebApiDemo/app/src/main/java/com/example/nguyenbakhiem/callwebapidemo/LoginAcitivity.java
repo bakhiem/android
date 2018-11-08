@@ -1,10 +1,15 @@
 package com.example.nguyenbakhiem.callwebapidemo;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,19 +37,30 @@ public class LoginAcitivity extends AppCompatActivity {
 
     private TextView txtName;
     private TextView txtPwd;
+    private CheckBox cbRemember;
 
     private String uName;
     private String pwd;
     MyTask myTask;
     User user;
+    SharedPreferences preferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_acitivity);
         txtName = (TextView) findViewById(R.id.txtNameLogin);
         txtPwd = (TextView) findViewById(R.id.txtPwdLogin);
-        user = User.getInstance();
+        cbRemember = (CheckBox) findViewById(R.id.cbRemember);
         myTask = new MyTask();
+        preferences = getSharedPreferences("account", Context.MODE_PRIVATE);
+        uName = preferences.getString("username", "");
+        pwd = preferences.getString("password","");
+        user = User.getInstance();
+        if(uName.trim().length() >0 && pwd.trim().length()>0)
+        {
+            myTask.execute("","");
+        }
+
     }
 
     public void login(View view)
@@ -69,9 +85,19 @@ public class LoginAcitivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            if(s.toLowerCase().contains("ok"))
+            if(s.toLowerCase().contains("choco"))
             {
                 user.setStatusLogin("OK");
+                if(cbRemember.isChecked())
+                {
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString("username", uName);
+                    editor.putString("password", pwd);
+                    editor.commit();
+                }
+                Intent intent = new Intent();
+                setResult(Activity.RESULT_OK, intent);
+                finish();
             }else
             {
                 Toast.makeText(getApplicationContext(),"Sai tên đăng nhập hoặc mật khẩu", Toast.LENGTH_LONG).show();
@@ -80,7 +106,6 @@ public class LoginAcitivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-            Toast.makeText(getApplicationContext(), strings[0], Toast.LENGTH_LONG).show();
             try {
                 URL url = new URL("https://provideapi.herokuapp.com/thoan");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();

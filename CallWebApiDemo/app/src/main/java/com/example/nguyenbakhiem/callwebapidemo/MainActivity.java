@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
     public void searchmeal(View view){
-        Intent intent = new Intent(getApplicationContext(),MealActivity.class);
+        Intent intent = new Intent(getApplicationContext(),LoginAcitivity.class);
         int[] arrayId = getListMealId();
         intent.putExtra("arrayId",arrayId);
         startActivity(intent);
