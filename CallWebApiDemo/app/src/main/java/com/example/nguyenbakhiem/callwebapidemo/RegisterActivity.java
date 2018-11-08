@@ -12,8 +12,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.JsonObject;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -25,13 +28,16 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText txtUsername;
     private EditText txtPwd;
     private EditText txtEmail;
+    private EditText txtRePwd;
 
     private String uName;
     private String pwd;
     private String email;
+    private String rePwd;
 
     private MyTask myTask;
     private SharedPreferences preferences;
+    private String test;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +46,7 @@ public class RegisterActivity extends AppCompatActivity {
         txtUsername = (EditText) findViewById(R.id.txtNameRegister);
         txtPwd = (EditText) findViewById(R.id.txtPwdRegister);
         txtEmail = (EditText) findViewById(R.id.txtEmailRegister);
+        txtRePwd = (EditText) findViewById(R.id.txtRePwdRegister);
         myTask = new MyTask();
     }
 
@@ -47,7 +54,16 @@ public class RegisterActivity extends AppCompatActivity {
         uName = txtUsername.getText().toString();
         pwd = txtPwd.getText().toString();
         email = txtEmail.getText().toString();
-        myTask.execute(uName, pwd,email);
+        rePwd = txtRePwd.getText().toString();
+        if(rePwd.equalsIgnoreCase(pwd))
+        {
+            myTask.execute(uName, pwd,email);
+        }
+        else
+        {
+            Toast.makeText(getApplicationContext(), "Password is not match", Toast.LENGTH_LONG).show();
+        }
+
     }
 
     class MyTask extends AsyncTask<String, Void, String> {
@@ -72,22 +88,32 @@ public class RegisterActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             } else {
-                Toast.makeText(getApplicationContext(), "Tên đăng nhập đã tồn tại", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Tên đăng nhập đã tồn tại hoặc password lỗi", Toast.LENGTH_LONG).show();
             }
         }
 
         @Override
         protected String doInBackground(String... strings) {
             try {
-                URL url = new URL("https://provideapi.herokuapp.com/thoan");
+                URL url = new URL("http://ec2-13-229-209-209.ap-southeast-1.compute.amazonaws.com:3001/api/user/register");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
+                connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
                 connection.setDoOutput(true);
-                OutputStream outputStream = connection.getOutputStream();
-                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream));
-                writer.write("{username:" + strings[0] + ",password:" + strings[1] + ",email:" + strings[2] +"}");
-                writer.flush();
-                outputStream.close();
+                //OutputStream outputStream = connection.getOutputStream();
+                //BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream));
+                JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty("username",strings[0]);
+                jsonObject.addProperty("password",strings[1]);
+                jsonObject.addProperty("email",strings[2]);
+                //writer.write("username:"+strings[0]+",password:"+strings[1]+",email:"+strings[2]);
+                DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
+                wr.writeBytes(jsonObject.toString());
+                wr.flush();
+                wr.close();
+                //writer.flush();
+                //outputStream.close();
+
                 InputStream inputStream = connection.getInputStream();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
                 StringBuilder sb = new StringBuilder();
@@ -95,10 +121,12 @@ public class RegisterActivity extends AppCompatActivity {
                 while ((line = reader.readLine()) != null) {
                     sb.append(line);
                 }
+
                 return sb.toString();
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            test = "{\"username\":\""+strings[0]+"\",\"password\":\""+strings[1]+"\",\"email\":\""+strings[2]+"\"}";
             return "";
         }
     }

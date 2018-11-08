@@ -112,7 +112,7 @@ public class MealActivity extends AppCompatActivity {
         protected String doInBackground(String... strings) {
 
             try {
-                URL url = new URL("https://provideapi.herokuapp.com/thoan");
+                URL url = new URL("http://ec2-13-229-209-209.ap-southeast-1.compute.amazonaws.com:3001/api/food/search");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.setDoOutput(true);

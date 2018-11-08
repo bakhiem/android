@@ -9,7 +9,6 @@ import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -61,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
     public void searchmeal(View view){
-        Intent intent = new Intent(MainActivity.this,MealActivity.class);
+        Intent intent = new Intent(getApplicationContext(),MealActivity.class);
         int[] arrayId = getListMealId();
         intent.putExtra("arrayId",arrayId);
         startActivity(intent);
@@ -130,7 +129,6 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-
             try {
                 URL url = new URL("https://provideapi.herokuapp.com" );
                 HttpURLConnection connection =(HttpURLConnection) url.openConnection();

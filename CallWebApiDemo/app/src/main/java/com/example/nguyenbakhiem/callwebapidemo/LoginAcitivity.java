@@ -11,16 +11,19 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -36,55 +39,53 @@ import entity.User;
 
 public class LoginAcitivity extends AppCompatActivity {
 
-    private TextView txtName;
-    private TextView txtPwd;
+    private EditText txtName;
+    private EditText txtPwd;
     private CheckBox cbRemember;
 
     private String uName;
     private String pwd;
     private MyTask myTask;
     private String token;
-    User user;
+    private User user;
+    private boolean typeLogin = true;
     private SharedPreferences preferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_acitivity);
-        txtName = (TextView) findViewById(R.id.txtNameLogin);
-        txtPwd = (TextView) findViewById(R.id.txtPwdLogin);
+        txtName = (EditText) findViewById(R.id.txtNameLogin);
+        txtPwd = (EditText) findViewById(R.id.txtPwdLogin);
         cbRemember = (CheckBox) findViewById(R.id.cbRemember);
         myTask = new MyTask();
         user = User.getInstance();
         //register sang
         Intent intent = getIntent();
-        if(intent.getStringExtra("registerSuccess")!= null)
-        {
+        if (intent.getStringExtra("registerSuccess") != null) {
             Toast.makeText(getApplicationContext(), "Register Success", Toast.LENGTH_LONG).show();
-        }
-        else
-        {
+        } else {
             //đã register và từng login remember
             preferences = getSharedPreferences("tokenLogin", Context.MODE_PRIVATE);
             token = preferences.getString("token", "");
 
-            if(token.trim().length() > 0)
-            {
+            if (token.trim().length() > 0) {
+                //Toast.makeText(getApplicationContext(),"Remove success", Toast.LENGTH_LONG).show();
+                typeLogin = false;
                 myTask.execute(token);
             }
         }
-
+        Toast.makeText(getApplicationContext(),token.toString(), Toast.LENGTH_LONG).show();
 
     }
 
-    public void login(View view)
-    {
+    public void login(View view) {
         uName = txtName.getText().toString();
         pwd = txtPwd.getText().toString();
-        myTask.execute(uName,pwd);
+        myTask.execute(uName, pwd);
     }
 
-    public void register(View view)
-    {
+    public void register(View view) {
         Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
         startActivity(intent);
         finish();
@@ -105,11 +106,9 @@ public class LoginAcitivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            if(s.trim().length()>0)
-            {
+            if (s.trim().length() > 0) {
                 user.setStatusLogin("OK");
-                if(cbRemember.isChecked())
-                {
+                if (cbRemember.isChecked()) {
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putString("token", s);
                     editor.commit();
@@ -117,26 +116,30 @@ public class LoginAcitivity extends AppCompatActivity {
                 Intent intent = new Intent();
                 setResult(Activity.RESULT_OK, intent);
                 finish();
-            }else
-            {
-                Toast.makeText(getApplicationContext(),"Sai tên đăng nhập hoặc mật khẩu", Toast.LENGTH_LONG).show();
+            } else {
+                if (typeLogin) {
+                    Toast.makeText(getApplicationContext(), "Sai tên đăng nhập hoặc mật khẩu", Toast.LENGTH_LONG).show();
+                }
             }
         }
 
         @Override
         protected String doInBackground(String... strings) {
             try {
-                if(strings.length > 1)
-                {
-                    URL url = new URL("https://provideapi.herokuapp.com/thoan");
+                if (strings.length > 1) {
+                    typeLogin = true;
+                    URL url = new URL("http://ec2-13-229-209-209.ap-southeast-1.compute.amazonaws.com:3001/api/user/login");
                     HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                     connection.setRequestMethod("POST");
+                    connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
                     connection.setDoOutput(true);
-                    OutputStream outputStream = connection.getOutputStream();
-                    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream));
-                    writer.write("{username:"+strings[0]+",password:"+strings[1]+"}");
-                    writer.flush();
-                    outputStream.close();
+                    JsonObject jsonObject = new JsonObject();
+                    jsonObject.addProperty("username",strings[0]);
+                    jsonObject.addProperty("password",strings[1]);
+                    DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
+                    wr.writeBytes(jsonObject.toString());
+                    wr.flush();
+                    wr.close();
                     InputStream inputStream = connection.getInputStream();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
                     StringBuilder sb = new StringBuilder();
@@ -145,18 +148,18 @@ public class LoginAcitivity extends AppCompatActivity {
                         sb.append(line);
                     }
                     return sb.toString();
-                }
-                else
-                {
-                    URL url = new URL("https://provideapi.herokuapp.com/thoan");
+                } else {
+                    URL url = new URL("http://ec2-13-229-209-209.ap-southeast-1.compute.amazonaws.com:3001/api/user/loginacc");
                     HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                     connection.setRequestMethod("POST");
+                    connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
                     connection.setDoOutput(true);
-                    OutputStream outputStream = connection.getOutputStream();
-                    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream));
-                    writer.write("{"+ strings[0]+"}");
-                    writer.flush();
-                    outputStream.close();
+                    JsonObject jsonObject = new JsonObject();
+                    jsonObject.addProperty("token",strings[0]);
+                    DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
+                    wr.writeBytes(jsonObject.toString());
+                    wr.flush();
+                    wr.close();
                     InputStream inputStream = connection.getInputStream();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
                     StringBuilder sb = new StringBuilder();
