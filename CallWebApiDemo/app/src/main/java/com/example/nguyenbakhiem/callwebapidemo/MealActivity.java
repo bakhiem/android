@@ -1,11 +1,15 @@
 package com.example.nguyenbakhiem.callwebapidemo;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -33,6 +37,7 @@ import java.util.List;
 
 import adapter.MealAdapter;
 import entity.Meal;
+import entity.User;
 
 public class MealActivity extends AppCompatActivity {
 
@@ -120,16 +125,11 @@ public class MealActivity extends AppCompatActivity {
         protected String doInBackground(String... strings) {
 
             try {
-                URL url = new URL("https://provideapi.herokuapp.com/thoan");
+                URL url = new URL("http://ec2-13-229-209-209.ap-southeast-1.compute.amazonaws.com:3001/api/food/search");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.setDoOutput(true);
                 connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
-//                OutputStream outputStream = connection.getOutputStream();
-//                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream));
-//                writer.write(materialsReceive);
-//                writer.flush();
-//                outputStream.close();
                 JSONArray jsonArray = new JSONArray(Arrays.asList(data));
                 JsonObject jsonObject = new JsonObject();
                 jsonObject.addProperty("list",materialsReceive);
@@ -150,6 +150,69 @@ public class MealActivity extends AppCompatActivity {
             }
             return "";
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menu.add("Search food");
+        menu.add("My favorite food");
+        User user = User.getInstance();
+        if(user.getStatusLogin() != null && user.getStatusLogin().toLowerCase().equals("ok"))
+        {
+            menu.add("Logout");
+        }
+        else
+        {
+            menu.add("Login");
+        }
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getTitle().equals("Search food")) {
+            if (!this.getClass().equals(MainActivity.class)) {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        } else if (item.getTitle().equals("My favorite food")) {
+            if (!this.getClass().equals(MainActivity.class)) {
+                Intent intent = new Intent(getApplicationContext(), LoginAcitivity.class);
+                startActivity(intent);
+                finish();
+            }
+        } else if (item.getTitle().equals("Login")) {
+            if (!this.getClass().equals(LoginAcitivity.class)) {
+                Intent intent = new Intent(getApplicationContext(), LoginAcitivity.class);
+                startActivity(intent);
+                finish();
+            }
+        }else if(item.getTitle().equals("Logout"))
+        {
+            AuthenLogout authenLogout = AuthenLogout.getInstance();
+            boolean check = authenLogout.logoutUser();
+            if(check)
+            {
+                SharedPreferences sharedPreferences = getSharedPreferences("tokenLogin", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("token", "");
+                editor.commit();
+                if (!this.getClass().equals(MainActivity.class)) {
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }else
+                {
+                    Toast.makeText(getApplicationContext(), "Logout successful", Toast.LENGTH_LONG).show();
+                }
+            }
+            else
+            {
+                Toast.makeText(getApplicationContext(), "You have not sign in yet", Toast.LENGTH_LONG).show();
+            }
+        }
+        return true;
     }
 
 }

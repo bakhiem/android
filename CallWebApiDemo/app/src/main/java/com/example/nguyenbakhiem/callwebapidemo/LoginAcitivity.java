@@ -8,6 +8,8 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
@@ -60,28 +62,31 @@ public class LoginAcitivity extends AppCompatActivity {
         cbRemember = (CheckBox) findViewById(R.id.cbRemember);
         myTask = new MyTask();
         user = User.getInstance();
+        preferences = getSharedPreferences("tokenLogin", Context.MODE_PRIVATE);
         //register sang
         Intent intent = getIntent();
         if (intent.getStringExtra("registerSuccess") != null) {
             Toast.makeText(getApplicationContext(), "Register Success", Toast.LENGTH_LONG).show();
         } else {
             //đã register và từng login remember
-            preferences = getSharedPreferences("tokenLogin51", Context.MODE_PRIVATE);
-            token = preferences.getString("token", "");
-
-            if (token.trim().length() > 0) {
-                //Toast.makeText(getApplicationContext(),"Remove success", Toast.LENGTH_LONG).show();
-                typeLogin = false;
-                myTask.execute(token);
+            if (user.getStatusLogin() == null) {
+                user.setStatusLogin("");
+            }
+            if (!user.getStatusLogin().toLowerCase().equals("ok")) {
+                token = preferences.getString("token", "");
+                if (token.trim().length() > 0) {
+                    AuthenLogin authenLogin = AuthenLogin.getInstance();
+                    authenLogin.checkLoginToken(token);
+                }
             }
         }
-        Toast.makeText(getApplicationContext(),token.toString(), Toast.LENGTH_LONG).show();
 
     }
 
     public void login(View view) {
         uName = txtName.getText().toString();
         pwd = txtPwd.getText().toString();
+        myTask = new MyTask();
         myTask.execute(uName, pwd);
     }
 
@@ -113,67 +118,104 @@ public class LoginAcitivity extends AppCompatActivity {
                     editor.putString("token", s);
                     editor.commit();
                 }
-                Intent intent = new Intent();
-                setResult(Activity.RESULT_OK, intent);
-                finish();
-            } else {
-                if (typeLogin) {
-                    Toast.makeText(getApplicationContext(), "Sai tên đăng nhập hoặc mật khẩu", Toast.LENGTH_LONG).show();
+                Intent intent = getIntent();
+                if (intent.getStringExtra("mealdetail") != null) {
+                    setResult(Activity.RESULT_OK, intent);
+                    finish();
+                } else {
+                    intent = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(intent);
+                    finish();
                 }
+            } else {
+                Toast.makeText(getApplicationContext(), "Sai tên đăng nhập hoặc mật khẩu", Toast.LENGTH_LONG).show();
+
             }
         }
 
         @Override
         protected String doInBackground(String... strings) {
             try {
-                if (strings.length > 1) {
-                    typeLogin = true;
-                    URL url = new URL("http://ec2-13-229-209-209.ap-southeast-1.compute.amazonaws.com:3001/api/user/login");
-                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                    connection.setRequestMethod("POST");
-                    connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
-                    connection.setDoOutput(true);
-                    JsonObject jsonObject = new JsonObject();
-                    jsonObject.addProperty("username",strings[0]);
-                    jsonObject.addProperty("password",strings[1]);
-                    DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
-                    wr.writeBytes(jsonObject.toString());
-                    wr.flush();
-                    wr.close();
-                    InputStream inputStream = connection.getInputStream();
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-                    StringBuilder sb = new StringBuilder();
-                    String line = null;
-                    while ((line = reader.readLine()) != null) {
-                        sb.append(line);
-                    }
-                    return sb.toString();
-                } else {
-                    URL url = new URL("http://ec2-13-229-209-209.ap-southeast-1.compute.amazonaws.com:3001/api/user/loginacc");
-                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                    connection.setRequestMethod("POST");
-                    connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
-                    connection.setDoOutput(true);
-                    JsonObject jsonObject = new JsonObject();
-                    jsonObject.addProperty("token",strings[0]);
-                    DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
-                    wr.writeBytes(jsonObject.toString());
-                    wr.flush();
-                    wr.close();
-                    InputStream inputStream = connection.getInputStream();
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-                    StringBuilder sb = new StringBuilder();
-                    String line = null;
-                    while ((line = reader.readLine()) != null) {
-                        sb.append(line);
-                    }
-                    return sb.toString();
+                typeLogin = true;
+                URL url = new URL("http://ec2-13-229-209-209.ap-southeast-1.compute.amazonaws.com:3001/api/user/login");
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("POST");
+                connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
+                connection.setDoOutput(true);
+                JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty("username", strings[0]);
+                jsonObject.addProperty("password", strings[1]);
+                DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
+                wr.writeBytes(jsonObject.toString());
+                wr.flush();
+                wr.close();
+                InputStream inputStream = connection.getInputStream();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                StringBuilder sb = new StringBuilder();
+                String line = null;
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line);
                 }
-
+                return sb.toString();
             } catch (Exception e) {
                 e.printStackTrace();
             }
             return "";
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menu.add("Search food");
+        menu.add("My favorite food");
+        User user = User.getInstance();
+        if (user.getStatusLogin() != null && user.getStatusLogin().toLowerCase().equals("ok")) {
+            menu.add("Logout");
+        } else {
+            menu.add("Login");
+        }
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getTitle().equals("Search food")) {
+            if (!this.getClass().equals(MainActivity.class)) {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        } else if (item.getTitle().equals("My favorite food")) {
+            if (!this.getClass().equals(MainActivity.class)) {
+                Intent intent = new Intent(getApplicationContext(), LoginAcitivity.class);
+                startActivity(intent);
+                finish();
+            }
+        } else if (item.getTitle().equals("Login")) {
+            if (!this.getClass().equals(LoginAcitivity.class)) {
+                Intent intent = new Intent(getApplicationContext(), LoginAcitivity.class);
+                startActivity(intent);
+                finish();
+            }
+        } else if (item.getTitle().equals("Logout")) {
+            AuthenLogout authenLogout = AuthenLogout.getInstance();
+            boolean check = authenLogout.logoutUser();
+            if (check) {
+                SharedPreferences sharedPreferences = getSharedPreferences("tokenLogin", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("token", "");
+                editor.commit();
+                if (!this.getClass().equals(MainActivity.class)) {
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Logout successful", Toast.LENGTH_LONG).show();
+                }
+            } else {
+                Toast.makeText(getApplicationContext(), "You have not sign in yet", Toast.LENGTH_LONG).show();
+            }
+        }
+        return true;
     }
 }

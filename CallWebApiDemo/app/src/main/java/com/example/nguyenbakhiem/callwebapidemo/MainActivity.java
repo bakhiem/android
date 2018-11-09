@@ -4,16 +4,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -65,14 +67,15 @@ public class MainActivity extends AppCompatActivity {
 
         user = User.getInstance();
 
-        if (user.getStatusLogin() == null || user.getStatusLogin().toLowerCase().equals("ok")) {
-            preferences = getSharedPreferences("tokenLogin", Context.MODE_PRIVATE);
-            token = preferences.getString("token", "");
-
-            if (token.trim().length() > 0) {
-                AuthenLogin authenLogin = new AuthenLogin(token);
-            }
-        }
+//        if (user.getStatusLogin() == null || user.getStatusLogin().toLowerCase().equals("ok")) {
+//            preferences = getSharedPreferences("tokenLogin", Context.MODE_PRIVATE);
+//            token = preferences.getString("token", "");
+//
+//            if (token.trim().length() > 0) {
+//                AuthenLogin authenLogin = AuthenLogin.getInstance();
+//                authenLogin.checkLoginToken(token);
+//            }
+//        }
 
         materials = new ArrayList<>();
         materialsLv = new ArrayList<>();
@@ -83,10 +86,6 @@ public class MainActivity extends AppCompatActivity {
 
         materialAdapter = new MaterialAdapter(this, materialsLv);
         listView.setAdapter(materialAdapter);
-
-
-
-
     }
 
     public void searchmeal(View view) {
@@ -185,4 +184,73 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        User user = User.getInstance();
+        if (user.getStatusLogin() == null) {
+            user.setStatusLogin("");
+        }
+        preferences = getSharedPreferences("tokenLogin", Context.MODE_PRIVATE);
+        token = preferences.getString("token", "");
+
+        if (token.trim().length() > 0) {
+            AuthenLogin authenLogin = AuthenLogin.getInstance();
+            authenLogin.checkLoginToken(token);
+        }
+        user = User.getInstance();
+        menu.add("Search food");
+        menu.add("My favorite food");
+
+        if (user.getStatusLogin() != null && user.getStatusLogin().toLowerCase().equals("ok")) {
+            menu.add("Logout");
+        } else {
+            menu.add("Login");
+        }
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getTitle().equals("Search food")) {
+            if (!this.getClass().equals(MainActivity.class)) {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        } else if (item.getTitle().equals("My favorite food")) {
+            if (!this.getClass().equals(MainActivity.class)) {
+                Intent intent = new Intent(getApplicationContext(), LoginAcitivity.class);
+                startActivity(intent);
+                finish();
+            }
+        } else if (item.getTitle().equals("Login")) {
+            if (!this.getClass().equals(LoginAcitivity.class)) {
+                Intent intent = new Intent(getApplicationContext(), LoginAcitivity.class);
+                startActivity(intent);
+                finish();
+            }
+        } else if (item.getTitle().equals("Logout")) {
+            AuthenLogout authenLogout = AuthenLogout.getInstance();
+            boolean check = authenLogout.logoutUser();
+            if (check) {
+                SharedPreferences sharedPreferences = getSharedPreferences("tokenLogin", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("token", "");
+                editor.commit();
+                if (!this.getClass().equals(MainActivity.class)) {
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Intent intent = new Intent(getApplicationContext(), LoginAcitivity.class);
+                    startActivity(intent);
+                    Toast.makeText(getApplicationContext(), "Logout successful", Toast.LENGTH_LONG).show();
+                    finish();
+                }
+            } else {
+                Toast.makeText(getApplicationContext(), "You have not sign in yet", Toast.LENGTH_LONG).show();
+            }
+        }
+        return true;
+    }
 }

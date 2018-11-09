@@ -4,11 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
-
-import org.json.JSONArray;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -16,30 +12,32 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.List;
 
-import entity.Material;
 import entity.User;
 
-public class AuthenLogin {
+public class AuthenLogout {
     private User user;
+    private SharedPreferences preferences;
+    private String token = "";
+    public static AuthenLogout instance;
 
-    public static AuthenLogin instance;
-
-    public static AuthenLogin getInstance() {
+    public static AuthenLogout getInstance() {
         if (instance == null) {
-            instance = new AuthenLogin();
+            instance = new AuthenLogout();
         }
         return instance;
     }
 
-    public void checkLoginToken(String token) {
+    public boolean logoutUser() {
         user = User.getInstance();
-        MyTask myTask = new MyTask();
-        if (token.trim().length() > 0) {
-            myTask.execute(token);
+        if(user.getStatusLogin().toLowerCase().equals("ok"))
+        {
+            MyTask myTask = new MyTask();
+            myTask.execute(user.getName());
+            user.setStatusLogin("");
+            return true;
         }
-        user.setStatusLogin("ok");
+        return false;
     }
 
     class MyTask extends AsyncTask<String, Void, String> {
@@ -57,35 +55,22 @@ public class AuthenLogin {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            if (s.trim().length() > 0) {
-                user.setStatusLogin("ok");
-            }
         }
 
         @Override
         protected String doInBackground(String... strings) {
-
             try {
-                URL url = new URL("http://ec2-13-229-209-209.ap-southeast-1.compute.amazonaws.com:3001/api/user/loginacc");
+                URL url = new URL("http://ec2-13-229-209-209.ap-southeast-1.compute.amazonaws.com:3001/api/user/logout");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
                 connection.setDoOutput(true);
                 JsonObject jsonObject = new JsonObject();
-                jsonObject.addProperty("token", strings[0]);
+                jsonObject.addProperty("username", strings[0]);
                 DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
                 wr.writeBytes(jsonObject.toString());
                 wr.flush();
                 wr.close();
-                InputStream inputStream = connection.getInputStream();
-                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-                StringBuilder sb = new StringBuilder();
-                String line = null;
-                while ((line = reader.readLine()) != null) {
-                    sb.append(line);
-                }
-                return sb.toString();
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -94,8 +79,7 @@ public class AuthenLogin {
 
     }
 
-    private AuthenLogin() {
+    private AuthenLogout() {
 
     }
-
 }

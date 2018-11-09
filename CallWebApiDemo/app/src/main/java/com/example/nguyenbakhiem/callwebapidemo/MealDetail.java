@@ -1,11 +1,15 @@
 package com.example.nguyenbakhiem.callwebapidemo;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -91,6 +95,7 @@ public class MealDetail extends AppCompatActivity {
         }
         else{
             Intent intent = new Intent(this,LoginAcitivity.class);
+            intent.putExtra("mealdetail","mealdetailchuyensangnhe:)");
             startActivityForResult(intent,100);
         }
     }
@@ -103,5 +108,68 @@ public class MealDetail extends AppCompatActivity {
                 Toast.makeText(this,"done",Toast.LENGTH_LONG).show();
             }
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menu.add("Search food");
+        menu.add("My favorite food");
+        User user = User.getInstance();
+        if(user.getStatusLogin() != null && user.getStatusLogin().toLowerCase().equals("ok"))
+        {
+            menu.add("Logout");
+        }
+        else
+        {
+            menu.add("Login");
+        }
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getTitle().equals("Search food")) {
+            if (!this.getClass().equals(MainActivity.class)) {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        } else if (item.getTitle().equals("My favorite food")) {
+            if (!this.getClass().equals(MainActivity.class)) {
+                Intent intent = new Intent(getApplicationContext(), LoginAcitivity.class);
+                startActivity(intent);
+                finish();
+            }
+        } else if (item.getTitle().equals("Login")) {
+            if (!this.getClass().equals(LoginAcitivity.class)) {
+                Intent intent = new Intent(getApplicationContext(), LoginAcitivity.class);
+                startActivity(intent);
+                finish();
+            }
+        }else if(item.getTitle().equals("Logout"))
+        {
+            AuthenLogout authenLogout = AuthenLogout.getInstance();
+            boolean check = authenLogout.logoutUser();
+            if(check)
+            {
+                SharedPreferences sharedPreferences = getSharedPreferences("tokenLogin", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("token", "");
+                editor.commit();
+                if (!this.getClass().equals(MainActivity.class)) {
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }else
+                {
+                    Toast.makeText(getApplicationContext(), "Logout successful", Toast.LENGTH_LONG).show();
+                }
+            }
+            else
+            {
+                Toast.makeText(getApplicationContext(), "You have not sign in yet", Toast.LENGTH_LONG).show();
+            }
+        }
+        return true;
     }
 }
