@@ -16,6 +16,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
+
 import entity.Meal;
 import entity.User;
 
@@ -41,12 +43,11 @@ public class MealDetail extends AppCompatActivity {
 
     }
     private void setData(){
-        new DownloadImageTask(imageView)
-                .execute(meal.getImgLink());
+        Picasso.with(this).load(meal.getImage_link()).into(imageView);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            textView.setText(Html.fromHtml("<h2>Title</h2><br><p>Description here</p>", Html.FROM_HTML_MODE_COMPACT));
+            textView.setText(Html.fromHtml(meal.getDescription(), Html.FROM_HTML_MODE_COMPACT));
         } else {
-            textView.setText(Html.fromHtml("<h2>Title</h2><br><p>Description here</p>"));
+            textView.setText(Html.fromHtml(meal.getDescription()));
         }
         if(user.getFavoriteMeal() != null && user.getFavoriteMeal().length() > 0){
             String favoriteMeal = user.getFavoriteMeal();

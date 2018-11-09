@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.example.nguyenbakhiem.callwebapidemo.R;
 import com.example.nguyenbakhiem.callwebapidemo.DownloadImageTask;
 import com.example.nguyenbakhiem.callwebapidemo.MealActivity;
+import com.squareup.picasso.Picasso;
 
 import java.io.InputStream;
 import java.util.List;
@@ -66,9 +67,9 @@ public class MealAdapter extends BaseAdapter {
         }
         Meal meal = list.get(position);
         myholder.txtName.setText(meal.getName());
-        new DownloadImageTask(myholder.imageView)
-                .execute(meal.getImgLink());
-
+//        new DownloadImageTask(myholder.imageView)
+//                .execute(meal.getImgLink());
+        Picasso.with(mealActivity).load(meal.getImage_link()).into(myholder.imageView);
         return view;
     }
 

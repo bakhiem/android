@@ -30,8 +30,7 @@ public class AuthenLogout {
 
     public boolean logoutUser() {
         user = User.getInstance();
-        if(user.getStatusLogin().toLowerCase().equals("ok"))
-        {
+        if (user.getStatusLogin().toLowerCase().equals("ok")) {
             MyTask myTask = new MyTask();
             myTask.execute(user.getName());
             user.setStatusLogin("");

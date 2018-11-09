@@ -13,6 +13,7 @@ public class Splashscreen extends Activity {
 
     Thread splashTread;
     ImageView imageView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

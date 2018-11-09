@@ -6,7 +6,7 @@ public class Meal implements Serializable{
     private int id;
     private String name;
     private String description;
-    private String imgLink;
+    private String image_link;
 
     public Meal() {
     }
@@ -15,7 +15,7 @@ public class Meal implements Serializable{
         this.id = id;
         this.name = name;
         this.description = description;
-        this.imgLink = imgLink;
+        this.image_link = imgLink;
     }
 
     public int getId() {
@@ -42,12 +42,12 @@ public class Meal implements Serializable{
         this.description = description;
     }
 
-    public String getImgLink() {
-        return "https://image2.tienphong.vn/w665/Uploaded/2018/bzivobxw/2014_03_20/ngoctring-croptop%20(12)_tdij.jpg";
+    public String getImage_link() {
+        return image_link;
     }
 
-    public void setImgLink(String imgLink) {
-        this.imgLink = imgLink;
+    public void setImage_link(String image_link) {
+        this.image_link = image_link;
     }
 
     @Override
