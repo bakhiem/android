@@ -31,7 +31,7 @@ public class MealDetail extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_meal_detail);
+        setContentView(R.layout.activity_meal_detail_new);
         Intent intent = getIntent();
          meal =(Meal) intent.getSerializableExtra("meal");
         imageView = findViewById(R.id.imageViewMealDetail);
