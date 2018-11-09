@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Material item = (Material) parent.getItemAtPosition(position);
                 autoCompleteTextView.setText("");
-                Toast.makeText(MainActivity.this,item.getImage_link(),Toast.LENGTH_LONG).show();
+
                 if (materialsLv.contains(item)) {
 
                 } else {

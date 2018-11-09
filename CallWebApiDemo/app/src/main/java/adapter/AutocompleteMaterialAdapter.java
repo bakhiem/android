@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.example.nguyenbakhiem.callwebapidemo.DownloadImageTask;
 import com.example.nguyenbakhiem.callwebapidemo.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,11 +59,14 @@ public class AutocompleteMaterialAdapter extends ArrayAdapter<Material> {
         Material material = filteredMaterials.get(position);
         LayoutInflater inflater =   LayoutInflater.from(getContext());
         convertView = inflater.inflate(R.layout.material_layout,parent,false);
+//        View view = inflater.inflate(R.layout.material_layout,parent,false);
         TextView tvName = (TextView) convertView.findViewById(R.id.textViewName);
         ImageView ivIcon = (ImageView) convertView.findViewById(R.id.imageViewPhoto);
         tvName.setText(material.getName());
-        new DownloadImageTask(ivIcon)
-                .execute(material.getImage_link());
+        Picasso.with(context).load(material.getImage_link()).into(ivIcon);
+//        new DownloadImageTask(ivIcon)
+//                .execute();
+//        return view;
         return convertView;
     }
     private void loadImageFromUrl(String url,ImageView imageView){

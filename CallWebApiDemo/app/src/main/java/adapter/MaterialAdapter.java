@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.example.nguyenbakhiem.callwebapidemo.DownloadImageTask;
 import com.example.nguyenbakhiem.callwebapidemo.MainActivity;
 import com.example.nguyenbakhiem.callwebapidemo.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -61,9 +62,9 @@ public class MaterialAdapter extends BaseAdapter {
 
         //Picasso.with(context).load("http://cdn.journaldev.com/wp-content/uploads/2016/11/android-image-picker-project-structure.png").into(imageView)
         //myItem.imgView.setImageResource(p.getImg());
-        new DownloadImageTask(myItem.imgView)
-                .execute(p.getImage_link());
-
+//        new DownloadImageTask(myItem.imgView)
+//                .execute(p.getImage_link());
+        Picasso.with(mainActivity).load(p.getImage_link()).into(myItem.imgView);
         return view;
     }
 
