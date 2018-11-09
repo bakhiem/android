@@ -139,6 +139,7 @@ public class MealDetail extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             }
+
         } else if (item.getTitle().equals("My favorite food")) {
             if (!this.getClass().equals(FavoriteActivity.class)) {
                 Intent intent = new Intent(getApplicationContext(), FavoriteActivity.class);

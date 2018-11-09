@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import entity.Material;
+import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
 public class AutocompleteMaterialAdapter extends ArrayAdapter<Material> {
     private List<Material> materials = new ArrayList<>();
@@ -63,7 +64,7 @@ public class AutocompleteMaterialAdapter extends ArrayAdapter<Material> {
         TextView tvName = (TextView) convertView.findViewById(R.id.textViewName);
         ImageView ivIcon = (ImageView) convertView.findViewById(R.id.imageViewPhoto);
         tvName.setText(material.getName());
-        Picasso.with(context).load(material.getImage_link()).into(ivIcon);
+        Picasso.with(context).load(material.getImage_link()).transform(new CropCircleTransformation()).into(ivIcon);
 //        new DownloadImageTask(ivIcon)
 //                .execute();
 //        return view;

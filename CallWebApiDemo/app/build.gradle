@@ -30,4 +30,6 @@ dependencies {
     implementation files('libs/gson-2.8.5.jar')
     //add library
     implementation files('libs/picasso-2.5.2.jar')
+    implementation files('libs/picasso-transformations-2.2.1.aar')
+
 }

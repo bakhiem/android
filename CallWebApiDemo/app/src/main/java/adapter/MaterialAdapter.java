@@ -14,6 +14,7 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import entity.Material;
+import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
 public class MaterialAdapter extends BaseAdapter {
     private MainActivity mainActivity;
@@ -64,7 +65,7 @@ public class MaterialAdapter extends BaseAdapter {
         //myItem.imgView.setImageResource(p.getImg());
 //        new DownloadImageTask(myItem.imgView)
 //                .execute(p.getImage_link());
-        Picasso.with(mainActivity).load(p.getImage_link()).into(myItem.imgView);
+        Picasso.with(mainActivity).load(p.getImage_link()).transform(new CropCircleTransformation()).into(myItem.imgView);
         return view;
     }
 
