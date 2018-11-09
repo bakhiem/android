@@ -25,7 +25,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/textViewMealName"
             android:layout_margin="16dp"
-            android:text="@string/large_text" />
+            android:textSize="20sp"
+            android:text="" />
     </RelativeLayout>
 
 

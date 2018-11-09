@@ -25,6 +25,7 @@ public class MealDetail extends AppCompatActivity {
     private ImageView imageView;
     private TextView textView;
     private ImageButton imageButton;
+    private TextView textViewMealName;
     User user;
     private boolean isStar = false;
     Meal meal;
@@ -37,6 +38,7 @@ public class MealDetail extends AppCompatActivity {
         imageView = findViewById(R.id.imageViewMealDetail);
         textView = findViewById(R.id.textViewMealDetail);
         imageButton = findViewById(R.id.imageButtonStar);
+        textViewMealName = findViewById(R.id.textViewMealName);
         user = User.getInstance();
         setData();
 
@@ -49,6 +51,7 @@ public class MealDetail extends AppCompatActivity {
         } else {
             textView.setText(Html.fromHtml(meal.getDescription()));
         }
+        textViewMealName.setText(meal.getName());
         if(user.getFavoriteMeal() != null && user.getFavoriteMeal().length() > 0){
             String favoriteMeal = user.getFavoriteMeal();
             String substring[] = favoriteMeal.split(",");
@@ -80,6 +83,8 @@ public class MealDetail extends AppCompatActivity {
                     favoriteMeal = favoriteMeal.replace("," + meal.getId(), "");
                 }
                 user.setFavoriteMeal(favoriteMeal);
+                User.lstMeal.remove(meal);
+
             }
             else{
                 imageButton.setImageResource(R.drawable.staron);
@@ -94,6 +99,7 @@ public class MealDetail extends AppCompatActivity {
                 }
 
                 user.setFavoriteMeal(favoriteMeal);
+                User.lstMeal.add(meal);
             }
             UpdateUser.getInstance().updateUser();
         }

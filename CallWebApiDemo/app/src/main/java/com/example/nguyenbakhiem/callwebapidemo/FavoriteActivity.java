@@ -49,109 +49,113 @@ public class FavoriteActivity extends AppCompatActivity {
         user = User.getInstance();
         txtResult = findViewById(R.id.textViewFavorite);
         listView = findViewById(R.id.listViewFavorite);
-        lstMeal = new ArrayList<>();
+        lstMeal = User.lstMeal;
         String favouriteMeal = user.getFavoriteMeal();
-        //when favorite > 0
-        if(favouriteMeal != null && favouriteMeal.length() > 0){
-            //when only 1 meal
-            if(favouriteMeal.length() == 1){
-                materialsReceive = favouriteMeal + "]";
-            }
-            else {
-                String[] subStr = favouriteMeal.split(",");
-                data = new String[subStr.length];
-                for(int i = 0; i < subStr.length; i++)
-                {
-                    materialsReceive += ""+subStr[i]+"";
-                    if(i < subStr.length - 1)
-                    {
-                        materialsReceive += ",";
-                    }else
-                    {
-                        materialsReceive += "]";
-                    }
-                }
-            }
-
-            MyTask myTask = new MyTask();
-            myTask.execute("", "");
+        if(user.getStatusLogin() == null || !user.getStatusLogin().toLowerCase().equalsIgnoreCase("ok")){
+            txtResult.setText("Bạn chưa đăng nhập, hãy đăng nhập để xem danh sách món ăn yêu thích");
         }
-
-    }
-    class MyTask extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected void onProgressUpdate(Void... values) {
-            super.onProgressUpdate(values);
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            JSONArray jsonArray = null;
-            try {
-                jsonArray = new JSONArray(s);
-                Gson gson = new Gson();
-
-                lstMeal = gson.fromJson(s, new TypeToken<List<Meal>>() { }.getType());
+        else{
+            //when favorite > 0
+            if(lstMeal != null && lstMeal.size() > 0){
                 MealAdapter mealAdapter = new MealAdapter(FavoriteActivity.this, lstMeal);
                 listView.setAdapter(mealAdapter);
                 txtResult.setText(Integer.toString(lstMeal.size())+" results:");
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        sendMealtoDetail(lstMeal.get(position)) ;
+                        //sendMealtoDetail(lstMeal.get(position)) ;
                     }
                 });
-            } catch (Exception e) {
-
+            }
+            else {
+                txtResult.setText("Bạn chưa có món ăn yêu thích nào");
             }
         }
-        public void sendMealtoDetail(Meal meal){
-            Intent intent = new Intent(FavoriteActivity.this,MealDetail.class);
-            intent.putExtra("meal",meal);
-            startActivity(intent);
-        }
+
+
+
+
 //        public void sendMealtoDetail(Meal meal){
 //            Intent intent = new Intent(MealActivity.this,MealDetail.class);
 //            intent.putExtra("meal",meal);
 //            startActivity(intent);
 //        }
-
-        @Override
-        protected String doInBackground(String... strings) {
-            try {
-                URL url = new URL("http://ec2-13-229-209-209.ap-southeast-1.compute.amazonaws.com:3001/api/food/search");
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.setRequestMethod("POST");
-                connection.setDoOutput(true);
-                connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
-                JSONArray jsonArray = new JSONArray(Arrays.asList(data));
-                JsonObject jsonObject = new JsonObject();
-                jsonObject.addProperty("list",materialsReceive);
-                DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
-                wr.writeBytes(jsonObject.toString());
-                wr.flush();
-                wr.close();
-                InputStream inputStream = connection.getInputStream();
-                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-                StringBuilder sb = new StringBuilder();
-                String line = null;
-                while ((line = reader.readLine()) != null) {
-                    sb.append(line);
-                }
-                return sb.toString();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return "";
-        }
     }
+
+//    class MyTask extends AsyncTask<String, Void, String> {
+//
+//        @Override
+//        protected void onPreExecute() {
+//            super.onPreExecute();
+//        }
+//
+//        @Override
+//        protected void onProgressUpdate(Void... values) {
+//            super.onProgressUpdate(values);
+//        }
+//
+//        @Override
+//        protected void onPostExecute(String s) {
+//            super.onPostExecute(s);
+//            JSONArray jsonArray = null;
+//            try {
+//                jsonArray = new JSONArray(s);
+//                Gson gson = new Gson();
+//
+//                lstMeal = gson.fromJson(s, new TypeToken<List<Meal>>() { }.getType());
+//                MealAdapter mealAdapter = new MealAdapter(FavoriteActivity.this, lstMeal);
+//                listView.setAdapter(mealAdapter);
+//                txtResult.setText(Integer.toString(lstMeal.size())+" results:");
+//                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                    @Override
+//                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                        sendMealtoDetail(lstMeal.get(position)) ;
+//                    }
+//                });
+//            } catch (Exception e) {
+//
+//            }
+//        }
+//        public void sendMealtoDetail(Meal meal){
+//            Intent intent = new Intent(FavoriteActivity.this,MealDetail.class);
+//            intent.putExtra("meal",meal);
+//            startActivity(intent);
+//        }
+////        public void sendMealtoDetail(Meal meal){
+////            Intent intent = new Intent(MealActivity.this,MealDetail.class);
+////            intent.putExtra("meal",meal);
+////            startActivity(intent);
+////        }
+//
+//        @Override
+//        protected String doInBackground(String... strings) {
+//            try {
+//                URL url = new URL("http://ec2-13-229-209-209.ap-southeast-1.compute.amazonaws.com:3001/api/food/search");
+//                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+//                connection.setRequestMethod("POST");
+//                connection.setDoOutput(true);
+//                connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
+//                JSONArray jsonArray = new JSONArray(Arrays.asList(data));
+//                JsonObject jsonObject = new JsonObject();
+//                jsonObject.addProperty("list",materialsReceive);
+//                DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
+//                wr.writeBytes(jsonObject.toString());
+//                wr.flush();
+//                wr.close();
+//                InputStream inputStream = connection.getInputStream();
+//                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+//                StringBuilder sb = new StringBuilder();
+//                String line = null;
+//                while ((line = reader.readLine()) != null) {
+//                    sb.append(line);
+//                }
+//                return sb.toString();
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//            return "";
+//        }
+//    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.add("Search food");

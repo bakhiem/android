@@ -86,8 +86,15 @@ public class LoginAcitivity extends AppCompatActivity {
     public void login(View view) {
         uName = txtName.getText().toString();
         pwd = txtPwd.getText().toString();
-        myTask = new MyTask();
-        myTask.execute(uName, pwd);
+
+        if(uName.length() > 0 && pwd.length() > 0){
+            myTask = new MyTask();
+            myTask.execute(uName, pwd);
+        }
+        else{
+            Toast.makeText(this, "Tên đăng nhập và mật khẩu trống", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     public void register(View view) {
