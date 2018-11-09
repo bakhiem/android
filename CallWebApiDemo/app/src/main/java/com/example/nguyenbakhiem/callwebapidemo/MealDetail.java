@@ -94,12 +94,14 @@ public class MealDetail extends AppCompatActivity {
 
                 user.setFavoriteMeal(favoriteMeal);
             }
+            UpdateUser.getInstance().UpdateUser();
         }
         else{
             Intent intent = new Intent(this,LoginAcitivity.class);
             intent.putExtra("mealdetail","mealdetailchuyensangnhe:)");
             startActivityForResult(intent,100);
         }
+
     }
 
 
@@ -139,7 +141,7 @@ public class MealDetail extends AppCompatActivity {
             }
         } else if (item.getTitle().equals("My favorite food")) {
             if (!this.getClass().equals(FavoriteActivity.class)) {
-                Intent intent = new Intent(getApplicationContext(), LoginAcitivity.class);
+                Intent intent = new Intent(getApplicationContext(), FavoriteActivity.class);
                 startActivity(intent);
                 finish();
             }

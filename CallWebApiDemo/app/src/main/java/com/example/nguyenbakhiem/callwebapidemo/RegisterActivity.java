@@ -59,14 +59,27 @@ public class RegisterActivity extends AppCompatActivity {
         pwd = txtPwd.getText().toString();
         email = txtEmail.getText().toString();
         rePwd = txtRePwd.getText().toString();
-        if(rePwd.equalsIgnoreCase(pwd))
-        {
-            myTask.execute(uName, pwd,email);
+
+        if(uName.length() == 0 || pwd.length() == 0 || email.length() == 0 || rePwd.length() == 0){
+            Toast.makeText(getApplicationContext(), "Điền vào tất cả các trường", Toast.LENGTH_LONG).show();
         }
-        else
-        {
-            Toast.makeText(getApplicationContext(), "Password is not match", Toast.LENGTH_LONG).show();
+        else{
+            if(rePwd.equalsIgnoreCase(pwd))
+            {
+                if(android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+                    myTask.execute(uName, pwd,email);
+                }
+                else{
+                    Toast.makeText(getApplicationContext(), "Không đúng định dạng email", Toast.LENGTH_LONG).show();
+                }
+
+            }
+            else
+            {
+                Toast.makeText(getApplicationContext(), "Password is not match", Toast.LENGTH_LONG).show();
+            }
         }
+
 
     }
 
@@ -160,7 +173,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
         } else if (item.getTitle().equals("My favorite food")) {
             if (!this.getClass().equals(FavoriteActivity.class)) {
-                Intent intent = new Intent(getApplicationContext(), LoginAcitivity.class);
+                Intent intent = new Intent(getApplicationContext(), FavoriteActivity.class);
                 startActivity(intent);
                 finish();
             }
