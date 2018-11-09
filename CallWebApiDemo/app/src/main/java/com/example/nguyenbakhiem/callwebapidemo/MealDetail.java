@@ -43,13 +43,6 @@ public class MealDetail extends AppCompatActivity {
     private void setData(){
         new DownloadImageTask(imageView)
                 .execute(meal.getImgLink());
-//        String des = meal.getDescription();
-//        String subStr[] = des.split("/n");
-//
-//        for (int i = 0 ; i < subStr.length;i++){
-//            textView.append(subStr[i]);
-//            textView.append(System.getProperty("line.separator"));
-//        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             textView.setText(Html.fromHtml("<h2>Title</h2><br><p>Description here</p>", Html.FROM_HTML_MODE_COMPACT));
         } else {
@@ -68,28 +61,37 @@ public class MealDetail extends AppCompatActivity {
         }
     }
     public void onStar(View view){
-        //imageButton.setImageResource(R.drawable.staron);
         if(user.getStatusLogin() != null && user.getStatusLogin().equalsIgnoreCase("ok")){
-            //imageButton.setImageResource(R.drawable.staron);
             if(isStar){
                 imageButton.setImageResource(R.drawable.staroff);
                 //xoa mon an da thich
+                isStar = false;
                 String favoriteMeal = user.getFavoriteMeal();
                 if(favoriteMeal.startsWith("" + meal.getId())){
-                    favoriteMeal.replace("" + meal.getId() + ",", "");
+                    if(favoriteMeal.length() == 1){
+                        favoriteMeal =   favoriteMeal.replace("" + meal.getId(), "");
+                    }
+                    else {
+                        favoriteMeal = favoriteMeal.replace("" + meal.getId() + ",", "");
+                    }
                 }
                 else {
-                    favoriteMeal.replace("," + meal.getId(), "");
+                    favoriteMeal = favoriteMeal.replace("," + meal.getId(), "");
                 }
-                Toast.makeText(this,favoriteMeal,Toast.LENGTH_LONG).show();
                 user.setFavoriteMeal(favoriteMeal);
             }
             else{
-
                 imageButton.setImageResource(R.drawable.staron);
                 //them vao mon an da thich
+                isStar = true;
                 String favoriteMeal = user.getFavoriteMeal();
-                favoriteMeal = favoriteMeal + "," + meal.getId();
+                if(favoriteMeal != null && favoriteMeal.length() > 0){
+                    favoriteMeal = favoriteMeal + "," + meal.getId();
+                }
+                else{
+                    favoriteMeal = "" + meal.getId();
+                }
+
                 user.setFavoriteMeal(favoriteMeal);
             }
         }
@@ -99,13 +101,14 @@ public class MealDetail extends AppCompatActivity {
             startActivityForResult(intent,100);
         }
     }
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == RESULT_OK){
             if (requestCode == 100){
-
-                Toast.makeText(this,"done",Toast.LENGTH_LONG).show();
+                Toast.makeText(this,"Login done",Toast.LENGTH_LONG).show();
             }
         }
     }

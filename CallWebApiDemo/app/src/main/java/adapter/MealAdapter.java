@@ -1,9 +1,11 @@
 package adapter;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -19,11 +21,11 @@ import java.util.List;
 import entity.Meal;
 
 public class MealAdapter extends BaseAdapter {
-    private MealActivity mealActivity;
+    private Context mealActivity;
     private List<Meal> list;
     private Meal meal;
 
-    public MealAdapter(MealActivity mealActivity, List<Meal> list)
+    public MealAdapter(Context mealActivity, List<Meal> list)
     {
         this.mealActivity = mealActivity;
         this.list = list;
@@ -49,7 +51,10 @@ public class MealAdapter extends BaseAdapter {
         Myholder myholder = new Myholder();
         if(view == null)
         {
-            view = mealActivity.getLayoutInflater().inflate(R.layout.meal_layout, null);
+            LayoutInflater inflater = (LayoutInflater) mealActivity.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
+             view = inflater.inflate( R.layout.meal_layout, null );
+
+            //view = mealActivity.getLayoutInflater().inflate(R.layout.meal_layout, null);
             myholder = new Myholder();
             myholder.txtName = view.findViewById(R.id.textViewMeal);
             myholder.imageView = view.findViewById(R.id.imageViewMeal);

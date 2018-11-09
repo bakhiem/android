@@ -31,7 +31,8 @@
         <activity android:name=".LoginAcitivity" />
         <activity android:name=".MealDetail" />
         <activity android:name=".LoginAcitivity" />
-        <activity android:name=".RegisterActivity"></activity>
+        <activity android:name=".RegisterActivity" />
+        <activity android:name=".FavoriteActivity"></activity>
     </application>
 
 </manifest>

@@ -93,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
         int[] arrayId = getListMealId();
         intent.putExtra("arrayId", arrayId);
         startActivity(intent);
+        finish();
     }
 
     public int[] getListMealId() {
