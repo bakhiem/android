@@ -94,7 +94,7 @@ public class MealDetail extends AppCompatActivity {
 
                 user.setFavoriteMeal(favoriteMeal);
             }
-            UpdateUser.getInstance().UpdateUser();
+            UpdateUser.getInstance().updateUser();
         }
         else{
             Intent intent = new Intent(this,LoginAcitivity.class);

@@ -62,7 +62,7 @@ public class MaterialAdapter extends BaseAdapter {
         //Picasso.with(context).load("http://cdn.journaldev.com/wp-content/uploads/2016/11/android-image-picker-project-structure.png").into(imageView)
         //myItem.imgView.setImageResource(p.getImg());
         new DownloadImageTask(myItem.imgView)
-                .execute(p.getImg());
+                .execute(p.getImage_link());
 
         return view;
     }

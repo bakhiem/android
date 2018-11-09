@@ -3,14 +3,14 @@ package entity;
 public class Material {
     private int id;
     private String name;
-    private String img;
+    private String image_link;
     public Material(){
 
     }
     public Material(int id, String name,String img) {
         this.id = id;
         this.name = name;
-        this.img = img;
+        this.image_link = img;
     }
 
     public int getId() {
@@ -29,12 +29,12 @@ public class Material {
         this.name = name;
     }
 
-    public String getImg() {
-        return "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHTvUjmTSh9x7NdDA7j_aT7RchWcyO8e3JY5alrJv-GvvXeuo7Zw";
+    public String getImage_link() {
+        return image_link;
     }
 
-    public void setImg(String img) {
-        this.img = img;
+    public void setImage_link(String image_link) {
+        this.image_link = image_link;
     }
 
     @Override

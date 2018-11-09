@@ -62,7 +62,7 @@ public class AutocompleteMaterialAdapter extends ArrayAdapter<Material> {
         ImageView ivIcon = (ImageView) convertView.findViewById(R.id.imageViewPhoto);
         tvName.setText(material.getName());
         new DownloadImageTask(ivIcon)
-                .execute(material.getImg());
+                .execute(material.getImage_link());
         return convertView;
     }
     private void loadImageFromUrl(String url,ImageView imageView){
