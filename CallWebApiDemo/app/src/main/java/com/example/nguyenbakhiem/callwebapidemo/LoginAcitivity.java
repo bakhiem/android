@@ -186,7 +186,7 @@ public class LoginAcitivity extends AppCompatActivity {
                 finish();
             }
         } else if (item.getTitle().equals("My favorite food")) {
-            if (!this.getClass().equals(MainActivity.class)) {
+            if (!this.getClass().equals(FavoriteActivity.class)) {
                 Intent intent = new Intent(getApplicationContext(), LoginAcitivity.class);
                 startActivity(intent);
                 finish();
