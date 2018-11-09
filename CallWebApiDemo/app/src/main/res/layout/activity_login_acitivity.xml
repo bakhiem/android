@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,88 +7,98 @@
     tools:context=".LoginAcitivity"
     tools:layout_editor_absoluteY="50dp">
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="29dp"
-        android:layout_marginStart="1dp"
-        android:text="Name"
-        app:layout_constraintBottom_toBottomOf="@+id/txtNameLogin"
-        app:layout_constraintEnd_toStartOf="@+id/txtNameLogin"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/txtNameLogin" />
+        android:layout_margin="16dp"
+        android:background="@drawable/customborder">
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="13dp"
-        android:layout_marginEnd="4dp"
-        android:layout_marginStart="1dp"
-        android:text="Password"
-        app:layout_constraintBottom_toBottomOf="@+id/txtPwdLogin"
-        app:layout_constraintEnd_toStartOf="@+id/txtPwdLogin"
-        app:layout_constraintStart_toStartOf="parent" />
+        <TableLayout
+            android:id="@+id/tl_login_form"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <EditText
-        android:id="@+id/txtNameLogin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="38dp"
-        android:layout_marginTop="88dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/txtPwdLogin"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView2"
-        app:layout_constraintTop_toTopOf="parent" />
+            <TableRow>
 
-    <EditText
-        android:id="@+id/txtPwdLogin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="25dp"
-        android:ems="10"
-        android:inputType="textPassword"
-        app:layout_constraintBottom_toTopOf="@+id/cbRemember"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView3"
-        app:layout_constraintTop_toBottomOf="@+id/txtNameLogin" />
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:padding="16dp"
+                    android:textSize="16sp"
+                    android:text="Username" />
 
-    <CheckBox
-        android:id="@+id/cbRemember"
-        android:layout_width="159dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="38dp"
-        android:text="Remember Me"
-        app:layout_constraintBottom_toTopOf="@+id/btnRegister"
-        app:layout_constraintStart_toStartOf="@+id/txtPwdLogin"
-        app:layout_constraintTop_toBottomOf="@+id/txtPwdLogin" />
+                <EditText
+                    android:id="@+id/txtNameLogin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="textPersonName" />
 
-    <Button
-        android:id="@+id/btnLogin"
-        android:layout_width="96dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="44dp"
-        android:onClick="login"
-        android:text="Login"
-        app:layout_constraintBaseline_toBaselineOf="@+id/btnRegister"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/btnRegister" />
+            </TableRow>
 
-    <Button
-        android:id="@+id/btnRegister"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="172dp"
-        android:layout_marginEnd="51dp"
-        android:layout_marginStart="35dp"
-        android:onClick="register"
-        android:text="Don't have account?"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btnLogin"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cbRemember" />
+            <TableRow>
 
-</android.support.constraint.ConstraintLayout>
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:padding="16dp"
+                    android:text="Password"
+                    android:textSize="16sp" />
+
+
+                <EditText
+                    android:id="@+id/txtPwdLogin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="textPassword" />
+
+            </TableRow>
+        </TableLayout>
+
+        <CheckBox
+            android:id="@+id/cbRemember"
+            android:layout_width="159dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tl_login_form"
+            android:layout_marginLeft="16dp"
+            android:text="Remember Me" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/cbRemember"
+            android:layout_centerVertical="true"
+            android:orientation="horizontal">
+
+
+            <Button
+                android:id="@+id/btnLogin"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_weight="1"
+                android:onClick="login"
+                android:text="Login" />
+
+            <Button
+                android:id="@+id/btnRegister"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_weight="1"
+                android:onClick="register"
+                android:text="Register" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>
