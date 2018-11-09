@@ -1,11 +1,15 @@
 package entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class User {
     private int id;
     private String name;
     private String pwd;
     private String statusLogin;
     private String favoriteMeal;
+    public static List<Meal> lstMeal;
 
     public static User instance;
     public static User getInstance()
@@ -13,6 +17,7 @@ public class User {
         if(instance == null)
         {
             instance = new User();
+            lstMeal = new ArrayList<Meal>();
         }
         return instance;
     }
