@@ -1,14 +1,8 @@
 package com.example.nguyenbakhiem.callwebapidemo;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
-
-import org.json.JSONArray;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -16,31 +10,26 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.List;
 
-import entity.Material;
 import entity.User;
 
-public class AuthenLogin {
+public class GetFavoriteMeal {
+
     private User user;
 
-    public static AuthenLogin instance;
+    public static GetFavoriteMeal instance;
 
-    public static AuthenLogin getInstance() {
+    public static GetFavoriteMeal getInstance() {
         if (instance == null) {
-            instance = new AuthenLogin();
+            instance = new GetFavoriteMeal();
         }
         return instance;
     }
 
-    public void checkLoginToken(String token) {
+    public void getFavoriteMeal() {
         user = User.getInstance();
         MyTask myTask = new MyTask();
-        if (token.trim().length() > 0) {
-            myTask.execute(token);
-        }
-        user.setStatusLogin("ok");
-        GetFavoriteMeal.getInstance().getFavoriteMeal();
+        myTask.execute(user.getName());
     }
 
     class MyTask extends AsyncTask<String, Void, String> {
@@ -59,7 +48,7 @@ public class AuthenLogin {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             if (s.trim().length() > 0) {
-                user.setStatusLogin("ok");
+                user.setFavoriteMeal(s);
             }
         }
 
@@ -73,7 +62,7 @@ public class AuthenLogin {
                 connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
                 connection.setDoOutput(true);
                 JsonObject jsonObject = new JsonObject();
-                jsonObject.addProperty("token", strings[0]);
+                jsonObject.addProperty("username", strings[0]);
                 DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
                 wr.writeBytes(jsonObject.toString());
                 wr.flush();
@@ -95,8 +84,7 @@ public class AuthenLogin {
 
     }
 
-    private AuthenLogin() {
+    private GetFavoriteMeal() {
 
     }
-
 }

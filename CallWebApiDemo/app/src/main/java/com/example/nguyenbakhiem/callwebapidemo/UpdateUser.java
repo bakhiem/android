@@ -26,7 +26,7 @@ public class UpdateUser {
         return instance;
     }
 
-    public void checkLoginToken() {
+    public void updateUser() {
         user = User.getInstance();
         String[] meal = user.getFavoriteMeal().split(",");
         for(int i = 0; i < meal.length; i++)

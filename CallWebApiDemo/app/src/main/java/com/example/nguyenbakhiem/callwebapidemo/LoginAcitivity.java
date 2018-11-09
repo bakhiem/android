@@ -127,6 +127,7 @@ public class LoginAcitivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 }
+                GetFavoriteMeal.getInstance().getFavoriteMeal();
             } else {
                 Toast.makeText(getApplicationContext(), "Sai tên đăng nhập hoặc mật khẩu", Toast.LENGTH_LONG).show();
 
