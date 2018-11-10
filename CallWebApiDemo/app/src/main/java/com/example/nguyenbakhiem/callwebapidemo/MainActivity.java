@@ -1,13 +1,16 @@
 package com.example.nguyenbakhiem.callwebapidemo;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -76,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
 //                authenLogin.checkLoginToken(token);
 //            }
 //        }
-
+        registerForContextMenu(listView);
         materials = new ArrayList<>();
         materialsLv = new ArrayList<>();
         MyTask myTask = new MyTask();
@@ -93,7 +96,12 @@ public class MainActivity extends AppCompatActivity {
         int[] arrayId = getListMealId();
         intent.putExtra("arrayId", arrayId);
         startActivity(intent);
-        finish();
+        //khi quay trở lại sẽ mất list vừa tìm, sẽ như ban đầu
+        materials.addAll(materialsLv);
+        materialsLv.clear();
+
+        materialAdapter.update(materialsLv);
+        materialAdapter.notifyDataSetChanged();
     }
 
     public int[] getListMealId() {
@@ -132,6 +140,26 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        getMenuInflater().inflate(R.menu.menu_longclick,menu);
+    }
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+             if(item.getTitle().equals("Delete")){
+                AdapterView.AdapterContextMenuInfo info= (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+                //final int id = materialsLv.get(info.position).getId();
+                 //
+                 materials.add(materialsLv.get(info.position));
+                 materialsLv.remove(info.position);
+
+                 materialAdapter.update(materialsLv);
+                 materialAdapter.notifyDataSetChanged();
+
+            }
+        return super.onContextItemSelected(item);
+    }
 
     class MyTask extends AsyncTask<String, Void, String> {
 

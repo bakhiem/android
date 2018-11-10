@@ -14,6 +14,7 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import entity.Material;
+import entity.Meal;
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
 public class MaterialAdapter extends BaseAdapter {
