@@ -50,7 +50,7 @@ public class FavoriteActivity extends AppCompatActivity {
         txtResult = findViewById(R.id.textViewFavorite);
         listView = findViewById(R.id.listViewFavorite);
         lstMeal = User.lstMeal;
-        String favouriteMeal = user.getFavoriteMeal();
+       // String favouriteMeal = user.getFavoriteMeal();
         if(user.getStatusLogin() == null || !user.getStatusLogin().toLowerCase().equalsIgnoreCase("ok")){
             txtResult.setText("Bạn chưa đăng nhập, hãy đăng nhập để xem danh sách món ăn yêu thích");
         }
@@ -63,7 +63,7 @@ public class FavoriteActivity extends AppCompatActivity {
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        //sendMealtoDetail(lstMeal.get(position)) ;
+                        sendMealtoDetail(lstMeal.get(position)) ;
                     }
                 });
             }
@@ -75,11 +75,12 @@ public class FavoriteActivity extends AppCompatActivity {
 
 
 
-//        public void sendMealtoDetail(Meal meal){
-//            Intent intent = new Intent(MealActivity.this,MealDetail.class);
-//            intent.putExtra("meal",meal);
-//            startActivity(intent);
-//        }
+
+    }
+    public void sendMealtoDetail(Meal meal){
+        Intent intent = new Intent(FavoriteActivity.this,MealDetail.class);
+        intent.putExtra("meal",meal);
+        startActivity(intent);
     }
 
 //    class MyTask extends AsyncTask<String, Void, String> {

@@ -52,21 +52,35 @@ public class MealDetail extends AppCompatActivity {
             textView.setText(Html.fromHtml(meal.getDescription()));
         }
         textViewMealName.setText(meal.getName());
-        if(user.getFavoriteMeal() != null && user.getFavoriteMeal().length() > 0){
-            String favoriteMeal = user.getFavoriteMeal();
-            String substring[] = favoriteMeal.split(",");
-            for (int i = 0; i < substring.length;i++){
+//        if(user.getFavoriteMeal() != null && user.getFavoriteMeal().length() > 0){
+//            String favoriteMeal = user.getFavoriteMeal();
+//            String substring[] = favoriteMeal.split(",");
+//            for (int i = 0; i < substring.length;i++){
+//                //mon da thich
+//                if(substring[i].equalsIgnoreCase("" + meal.getId())){
+//                    imageButton.setImageResource(R.drawable.staron);
+//                    isStar = true;
+//                }
+//            }
+//        }
+
+
+        if(User.lstMeal != null && User.lstMeal.size() > 0){
+            for (int i = 0; i < User.lstMeal.size();i++){
                 //mon da thich
-                if(substring[i].equalsIgnoreCase("" + meal.getId())){
+                if(User.lstMeal.get(i).getId() == meal.getId()){
                     imageButton.setImageResource(R.drawable.staron);
                     isStar = true;
                 }
             }
         }
+
+
     }
     public void onStar(View view){
         if(user.getStatusLogin() != null && user.getStatusLogin().equalsIgnoreCase("ok")){
             if(isStar){
+                Toast.makeText(this,"Đã xóa khỏi món ăn ưa thích",Toast.LENGTH_LONG).show();
                 imageButton.setImageResource(R.drawable.staroff);
                 //xoa mon an da thich
                 isStar = false;
@@ -82,12 +96,19 @@ public class MealDetail extends AppCompatActivity {
                 else {
                     favoriteMeal = favoriteMeal.replace("," + meal.getId(), "");
                 }
+                for (Meal a : User.lstMeal) {
+                    if (a.getId() == meal.getId()) {
+
+                        User.lstMeal.remove(a);
+                    }
+                }
                 user.setFavoriteMeal(favoriteMeal);
-                User.lstMeal.remove(meal);
+
 
             }
             else{
                 imageButton.setImageResource(R.drawable.staron);
+                Toast.makeText(this,"Đã thêm vào món ăn ưa thích",Toast.LENGTH_LONG).show();
                 //them vao mon an da thich
                 isStar = true;
                 String favoriteMeal = user.getFavoriteMeal();
@@ -117,7 +138,8 @@ public class MealDetail extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == RESULT_OK){
             if (requestCode == 100){
-                Toast.makeText(this,"Login done",Toast.LENGTH_LONG).show();
+                Toast.makeText(this,"Đăng nhập thành công",Toast.LENGTH_LONG).show();
+
             }
         }
     }
