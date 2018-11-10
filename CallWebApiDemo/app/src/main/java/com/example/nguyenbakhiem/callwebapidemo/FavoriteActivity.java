@@ -57,7 +57,7 @@ public class FavoriteActivity extends AppCompatActivity {
         else{
             //when favorite > 0
             if(lstMeal != null && lstMeal.size() > 0){
-                MealAdapter mealAdapter = new MealAdapter(FavoriteActivity.this, lstMeal);
+                MealAdapter mealAdapter = MealAdapter.getInstanceFavorite(FavoriteActivity.this, lstMeal);
                 listView.setAdapter(mealAdapter);
                 txtResult.setText(Integer.toString(lstMeal.size())+" results:");
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -81,6 +81,8 @@ public class FavoriteActivity extends AppCompatActivity {
         Intent intent = new Intent(FavoriteActivity.this,MealDetail.class);
         intent.putExtra("meal",meal);
         startActivity(intent);
+
+
     }
 
 //    class MyTask extends AsyncTask<String, Void, String> {

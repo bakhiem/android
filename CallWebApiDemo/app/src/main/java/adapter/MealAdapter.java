@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.nguyenbakhiem.callwebapidemo.FavoriteActivity;
 import com.example.nguyenbakhiem.callwebapidemo.R;
 import com.example.nguyenbakhiem.callwebapidemo.DownloadImageTask;
 import com.example.nguyenbakhiem.callwebapidemo.MealActivity;
@@ -19,6 +21,7 @@ import com.squareup.picasso.Picasso;
 import java.io.InputStream;
 import java.util.List;
 
+import entity.Material;
 import entity.Meal;
 
 public class MealAdapter extends BaseAdapter {
@@ -26,6 +29,22 @@ public class MealAdapter extends BaseAdapter {
     private List<Meal> list;
     private Meal meal;
 
+    public static MealAdapter mealinstance;
+    public static MealAdapter favinstance;
+    public static MealAdapter getInstanceMeal(Context mealActivity, List<Meal> list){
+        if(mealinstance == null){
+            mealinstance = new MealAdapter(mealActivity,list);
+            
+        }
+        return mealinstance;
+    }
+    public static MealAdapter getInstanceFavorite(Context favActivity, List<Meal> list){
+        if(favinstance == null){
+            favinstance = new MealAdapter(favActivity,list);
+
+        }
+        return favinstance;
+    }
     public MealAdapter(Context mealActivity, List<Meal> list)
     {
         this.mealActivity = mealActivity;
@@ -45,7 +64,9 @@ public class MealAdapter extends BaseAdapter {
     public long getItemId(int position) {
         return position;
     }
-
+    public void update(List<Meal> list2){
+        list = list2;
+    }
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;

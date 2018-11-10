@@ -34,6 +34,9 @@ public class AuthenLogout {
             MyTask myTask = new MyTask();
             myTask.execute(user.getName());
             user.setStatusLogin("");
+            user.setName("");
+            user.setFavoriteMeal("");
+            User.lstMeal.clear();
             return true;
         }
         return false;

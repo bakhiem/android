@@ -102,7 +102,7 @@ public class MealActivity extends AppCompatActivity {
                 Gson gson = new Gson();
 
                 lstMeal = gson.fromJson(s, new TypeToken<List<Meal>>() { }.getType());
-                MealAdapter mealAdapter = new MealAdapter(MealActivity.this, lstMeal);
+                MealAdapter mealAdapter = MealAdapter.getInstanceMeal(MealActivity.this, lstMeal);
                 listView.setAdapter(mealAdapter);
                 txtResult.setText(Integer.toString(lstMeal.size())+" results:");
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
+import adapter.MealAdapter;
 import entity.Meal;
 import entity.User;
 
@@ -99,6 +100,10 @@ public class MealDetail extends AppCompatActivity {
                 for (Meal a : User.lstMeal) {
                     if (a.getId() == meal.getId()) {
                         User.lstMeal.remove(a);
+                        MealAdapter mealAdapter = MealAdapter.getInstanceFavorite(null,null);
+                        mealAdapter.update(User.lstMeal);
+                        mealAdapter.notifyDataSetChanged();
+                        break;
                     }
                 }
                 user.setFavoriteMeal(favoriteMeal);
@@ -120,6 +125,9 @@ public class MealDetail extends AppCompatActivity {
 
                 user.setFavoriteMeal(favoriteMeal);
                 User.lstMeal.add(meal);
+                MealAdapter mealAdapter = MealAdapter.getInstanceFavorite(null,null);
+                mealAdapter.update(User.lstMeal);
+                mealAdapter.notifyDataSetChanged();
             }
             UpdateUser.getInstance().updateUser();
         }

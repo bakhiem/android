@@ -66,19 +66,18 @@ public class GetFavoriteMeal {
                 if(User.getInstance().lstMeal.size() == 1){
                     fav += User.getInstance().lstMeal.get(0).getId() ;
                 }
-                else
-                if(User.getInstance().lstMeal.size() > 1){
+                else if(User.getInstance().lstMeal.size() > 1){
                     for (int i = 0; i < User.getInstance().lstMeal.size();i ++){
 
-                        if(i ==  User.getInstance().lstMeal.size() - 1 ){
-                            fav += User.getInstance().lstMeal.get(i).getId() + ",";
-                        }
-                        else{
+                        if(i ==  0  ){
                             fav += User.getInstance().lstMeal.get(i).getId();
                         }
-
+                        else{
+                            fav +=  "," + User.getInstance().lstMeal.get(i).getId();
+                        }
                     }
                 }
+
                 u.setFavoriteMeal(fav);
 
 
