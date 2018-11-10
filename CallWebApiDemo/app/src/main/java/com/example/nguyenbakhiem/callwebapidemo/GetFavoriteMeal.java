@@ -3,6 +3,7 @@ package com.example.nguyenbakhiem.callwebapidemo;
 import android.os.AsyncTask;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -16,7 +17,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import adapter.MealAdapter;
 import entity.Meal;
@@ -61,6 +65,7 @@ public class GetFavoriteMeal {
                 jsonArray = new JSONArray(s);
                 Gson gson = new Gson();
                 User.getInstance().lstMeal = gson.fromJson(s, new TypeToken<List<Meal>>() { }.getType());
+
                 User u = User.getInstance();
                 String fav = "";
                 if(User.getInstance().lstMeal.size() == 1){

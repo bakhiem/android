@@ -27,6 +27,7 @@ public class UpdateUser {
     }
 
     public void updateUser() {
+        dataSend = "";
         user = User.getInstance();
         String[] meal = user.getFavoriteMeal().split(",");
         for(int i = 0; i < meal.length; i++)

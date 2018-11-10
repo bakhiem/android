@@ -54,17 +54,7 @@ public class MealDetail extends AppCompatActivity {
             textView.setText(Html.fromHtml(meal.getDescription()));
         }
         textViewMealName.setText(meal.getName());
-//        if(user.getFavoriteMeal() != null && user.getFavoriteMeal().length() > 0){
-//            String favoriteMeal = user.getFavoriteMeal();
-//            String substring[] = favoriteMeal.split(",");
-//            for (int i = 0; i < substring.length;i++){
-//                //mon da thich
-//                if(substring[i].equalsIgnoreCase("" + meal.getId())){
-//                    imageButton.setImageResource(R.drawable.staron);
-//                    isStar = true;
-//                }
-//            }
-//        }
+
 
 
         if(User.lstMeal != null && User.lstMeal.size() > 0){
@@ -82,29 +72,38 @@ public class MealDetail extends AppCompatActivity {
     public void onStar(View view){
         if(user.getStatusLogin() != null && user.getStatusLogin().equalsIgnoreCase("ok")){
             if(isStar){
-                Toast.makeText(this,"Đã xóa khỏi món ăn ưa thích",Toast.LENGTH_LONG).show();
+               Toast.makeText(this,"Đã xóa khỏi món ăn ưa thích",Toast.LENGTH_LONG).show();
                 imageButton.setImageResource(R.drawable.staroff);
                 //xoa mon an da thich
                 isStar = false;
                 String favoriteMeal = user.getFavoriteMeal();
-                if(favoriteMeal.startsWith("" + meal.getId())){
-                    if(favoriteMeal.length() == 1){
-                        favoriteMeal =   favoriteMeal.replace("" + meal.getId(), "");
-                    }
-                    else {
-                        favoriteMeal = favoriteMeal.replace("" + meal.getId() + ",", "");
+
+                String subStr[] = favoriteMeal.split(",");
+                favoriteMeal = "";
+                if(subStr == null || subStr.length == 1){
+                    favoriteMeal = "";
+                }
+                else{
+                    for (int i = 0; i < subStr.length ; i++){
+                        if(subStr[i].equalsIgnoreCase("" + meal.getId())){
+
+                        }else {
+                            if(i == 0){
+                                favoriteMeal += subStr[i];
+                            }
+                            else{
+                                favoriteMeal += "," + subStr[i];
+                            }
+                        }
+
+
                     }
                 }
-                else {
-                    favoriteMeal = favoriteMeal.replace("," + meal.getId(), "");
-                }
-                for (Meal a : User.lstMeal) {
-                    if (a.getId() == meal.getId()) {
-                        User.lstMeal.remove(a);
-//                        MealAdapter mealAdapter = MealAdapter.getInstanceFavorite(null,null);
-//                        mealAdapter.update(User.lstMeal);
-//                        mealAdapter.notifyDataSetChanged();
-                        break;
+
+                for (int i = 0 ; i < User.lstMeal.size();i++){
+                    if (User.lstMeal.get(i).getId() == meal.getId()) {
+                        User.lstMeal.remove(i);
+                        i--;
                     }
                 }
                 user.setFavoriteMeal(favoriteMeal);
