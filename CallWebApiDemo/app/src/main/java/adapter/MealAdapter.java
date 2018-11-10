@@ -29,22 +29,21 @@ public class MealAdapter extends BaseAdapter {
     private List<Meal> list;
     private Meal meal;
 
-    public static MealAdapter mealinstance;
-    public static MealAdapter favinstance;
-    public static MealAdapter getInstanceMeal(Context mealActivity, List<Meal> list){
-        if(mealinstance == null){
-            mealinstance = new MealAdapter(mealActivity,list);
-            
-        }
-        return mealinstance;
-    }
-    public static MealAdapter getInstanceFavorite(Context favActivity, List<Meal> list){
-        if(favinstance == null){
-            favinstance = new MealAdapter(favActivity,list);
-
-        }
-        return favinstance;
-    }
+//    public static MealAdapter mealinstance;
+//    public static MealAdapter favinstance;
+//    public static MealAdapter getInstanceMeal(Context mealActivity, List<Meal> list){
+//        if(mealinstance == null){
+//            mealinstance = new MealAdapter(mealActivity,list);
+//        }
+//        return mealinstance;
+//    }
+//    public static MealAdapter getInstanceFavorite(Context favActivity, List<Meal> list){
+//        if(favinstance == null){
+//            favinstance = new MealAdapter(favActivity,list);
+//
+//        }
+//        return favinstance;
+//    }
     public MealAdapter(Context mealActivity, List<Meal> list)
     {
         this.mealActivity = mealActivity;
@@ -74,7 +73,7 @@ public class MealAdapter extends BaseAdapter {
         if(view == null)
         {
             LayoutInflater inflater = (LayoutInflater) mealActivity.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
-             view = inflater.inflate( R.layout.meal_layout, null );
+            view = inflater.inflate( R.layout.meal_layout, null );
 
             //view = mealActivity.getLayoutInflater().inflate(R.layout.meal_layout, null);
             myholder = new Myholder();

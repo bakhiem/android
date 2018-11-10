@@ -4,24 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MealActivity">
+    tools:context=".MealActivity"
+    tools:layout_editor_absoluteY="81dp">
 
     <ListView
         android:id="@+id/listViewMeal"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtMeal" />
+        android:layout_width="384dp"
+        android:layout_height="415dp"
+        tools:layout_editor_absoluteY="97dp" />
 
     <TextView
         android:id="@+id/txtMeal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="51dp"
-        android:layout_marginTop="6dp"
-        app:layout_constraintBottom_toTopOf="@+id/listViewMeal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textSize="30sp"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="16dp" />
 </android.support.constraint.ConstraintLayout>

@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -100,9 +101,9 @@ public class MealDetail extends AppCompatActivity {
                 for (Meal a : User.lstMeal) {
                     if (a.getId() == meal.getId()) {
                         User.lstMeal.remove(a);
-                        MealAdapter mealAdapter = MealAdapter.getInstanceFavorite(null,null);
-                        mealAdapter.update(User.lstMeal);
-                        mealAdapter.notifyDataSetChanged();
+//                        MealAdapter mealAdapter = MealAdapter.getInstanceFavorite(null,null);
+//                        mealAdapter.update(User.lstMeal);
+//                        mealAdapter.notifyDataSetChanged();
                         break;
                     }
                 }
@@ -125,9 +126,9 @@ public class MealDetail extends AppCompatActivity {
 
                 user.setFavoriteMeal(favoriteMeal);
                 User.lstMeal.add(meal);
-                MealAdapter mealAdapter = MealAdapter.getInstanceFavorite(null,null);
-                mealAdapter.update(User.lstMeal);
-                mealAdapter.notifyDataSetChanged();
+//                MealAdapter mealAdapter = MealAdapter.getInstanceFavorite(null,null);
+//                mealAdapter.update(User.lstMeal);
+//                mealAdapter.notifyDataSetChanged();
             }
             UpdateUser.getInstance().updateUser();
         }
@@ -219,5 +220,16 @@ public class MealDetail extends AppCompatActivity {
             }
         }
         return true;
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK)
+        {
+            Intent intent = new Intent(getApplicationContext(), FavoriteActivity.class);
+            startActivity(intent);
+            finish();
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

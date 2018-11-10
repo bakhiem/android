@@ -102,7 +102,8 @@ public class MealActivity extends AppCompatActivity {
                 Gson gson = new Gson();
 
                 lstMeal = gson.fromJson(s, new TypeToken<List<Meal>>() { }.getType());
-                MealAdapter mealAdapter = MealAdapter.getInstanceMeal(MealActivity.this, lstMeal);
+               //MealAdapter mealAdapter = MealAdapter.getInstanceMeal(MealActivity.this, lstMeal);
+                MealAdapter mealAdapter = new MealAdapter(getApplicationContext(), lstMeal);
                 listView.setAdapter(mealAdapter);
                 txtResult.setText(Integer.toString(lstMeal.size())+" results:");
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

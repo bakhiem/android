@@ -49,7 +49,7 @@ public class FavoriteActivity extends AppCompatActivity {
         user = User.getInstance();
         txtResult = findViewById(R.id.textViewFavorite);
         listView = findViewById(R.id.listViewFavorite);
-        lstMeal = User.lstMeal;
+        lstMeal = User.getInstance().lstMeal;
        // String favouriteMeal = user.getFavoriteMeal();
         if(user.getStatusLogin() == null || !user.getStatusLogin().toLowerCase().equalsIgnoreCase("ok")){
             txtResult.setText("Bạn chưa đăng nhập, hãy đăng nhập để xem danh sách món ăn yêu thích");
@@ -57,13 +57,15 @@ public class FavoriteActivity extends AppCompatActivity {
         else{
             //when favorite > 0
             if(lstMeal != null && lstMeal.size() > 0){
-                MealAdapter mealAdapter = MealAdapter.getInstanceFavorite(FavoriteActivity.this, lstMeal);
+                //MealAdapter mealAdapter = MealAdapter.getInstanceFavorite(FavoriteActivity.this, lstMeal);
+                MealAdapter mealAdapter = new MealAdapter(getApplicationContext(), lstMeal);
                 listView.setAdapter(mealAdapter);
                 txtResult.setText(Integer.toString(lstMeal.size())+" results:");
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         sendMealtoDetail(lstMeal.get(position)) ;
+                        finish();
                     }
                 });
             }
