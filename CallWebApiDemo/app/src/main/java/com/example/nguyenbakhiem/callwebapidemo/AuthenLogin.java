@@ -60,6 +60,7 @@ public class AuthenLogin {
             super.onPostExecute(s);
             if (s.trim().length() > 0) {
                 user.setStatusLogin("ok");
+                GetFavoriteMeal.getInstance().getFavoriteMeal();
             }
         }
 

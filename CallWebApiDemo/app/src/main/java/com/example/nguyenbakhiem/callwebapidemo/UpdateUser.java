@@ -17,7 +17,7 @@ public class UpdateUser {
     private User user;
 
     public static UpdateUser instance;
-    private String dataSend  = "[";
+    private String dataSend  = "";
 
     public static UpdateUser getInstance() {
         if (instance == null) {
@@ -31,13 +31,13 @@ public class UpdateUser {
         String[] meal = user.getFavoriteMeal().split(",");
         for(int i = 0; i < meal.length; i++)
         {
-            dataSend += ""+meal[i]+"";
+            dataSend += meal[i];
             if(i < meal.length - 1)
             {
                 dataSend += ",";
             }else
             {
-                dataSend += "]";
+                dataSend += "";
             }
         }
         MyTask myTask = new MyTask();

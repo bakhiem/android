@@ -61,7 +61,7 @@ public class GetFavoriteMeal {
                 jsonArray = new JSONArray(s);
                 Gson gson = new Gson();
                 User.getInstance().lstMeal = gson.fromJson(s, new TypeToken<List<Meal>>() { }.getType());
-
+              int x =  User.getInstance().lstMeal.size();
             } catch (Exception e) {
 
             }

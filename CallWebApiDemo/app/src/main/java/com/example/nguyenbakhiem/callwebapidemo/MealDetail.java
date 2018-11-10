@@ -138,10 +138,16 @@ public class MealDetail extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == RESULT_OK){
             if (requestCode == 100){
-                Toast.makeText(this,"Đăng nhập thành công",Toast.LENGTH_LONG).show();
-
+                onRestart();
             }
         }
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        startActivity(getIntent());
+        finish();
     }
 
     @Override
