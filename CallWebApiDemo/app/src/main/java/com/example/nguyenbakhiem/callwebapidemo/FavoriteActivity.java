@@ -82,8 +82,9 @@ public class FavoriteActivity extends AppCompatActivity {
     public void sendMealtoDetail(Meal meal){
         Intent intent = new Intent(FavoriteActivity.this,MealDetail.class);
         intent.putExtra("meal",meal);
+        intent.putExtra("favorite", "favoriteeeeeee");
         startActivity(intent);
-
+        finish();
 
     }
 

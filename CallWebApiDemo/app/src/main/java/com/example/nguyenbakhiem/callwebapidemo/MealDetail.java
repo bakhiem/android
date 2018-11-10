@@ -226,9 +226,18 @@ public class MealDetail extends AppCompatActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if(keyCode == KeyEvent.KEYCODE_BACK)
         {
-            Intent intent = new Intent(getApplicationContext(), FavoriteActivity.class);
-            startActivity(intent);
-            finish();
+            //Intent intent = new Intent(getApplicationContext(), FavoriteActivity.class);
+            Intent intent = getIntent();
+            if(intent.getStringExtra("favorite") != null)
+            {
+                intent = new Intent(getApplicationContext(), FavoriteActivity.class);
+                startActivity(intent);
+                finish();
+            }
+            else
+            {
+                finish();
+            }
         }
         return super.onKeyDown(keyCode, event);
     }
