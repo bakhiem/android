@@ -123,6 +123,8 @@ public class LoginAcitivity extends AppCompatActivity {
                 user.setStatusLogin("ok");
                 GetFavoriteMeal getFavoriteMeal = GetFavoriteMeal.getInstance();
                 getFavoriteMeal.getFavoriteMeal();
+                user.setName(uName);
+                GetFavoriteMeal.getInstance().getFavoriteMeal();
                 if (cbRemember.isChecked()) {
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putString("token", s);
@@ -138,7 +140,6 @@ public class LoginAcitivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 }
-
 
             } else {
                 Toast.makeText(getApplicationContext(), "Sai tên đăng nhập hoặc mật khẩu", Toast.LENGTH_LONG).show();

@@ -98,7 +98,6 @@ public class MealDetail extends AppCompatActivity {
                 }
                 for (Meal a : User.lstMeal) {
                     if (a.getId() == meal.getId()) {
-
                         User.lstMeal.remove(a);
                     }
                 }

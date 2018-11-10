@@ -61,7 +61,31 @@ public class GetFavoriteMeal {
                 jsonArray = new JSONArray(s);
                 Gson gson = new Gson();
                 User.getInstance().lstMeal = gson.fromJson(s, new TypeToken<List<Meal>>() { }.getType());
-              int x =  User.getInstance().lstMeal.size();
+                User u = User.getInstance();
+                String fav = "";
+                if(User.getInstance().lstMeal.size() == 1){
+                    fav += User.getInstance().lstMeal.get(0).getId() ;
+                }
+                else
+                if(User.getInstance().lstMeal.size() > 1){
+                    for (int i = 0; i < User.getInstance().lstMeal.size();i ++){
+
+                        if(i ==  User.getInstance().lstMeal.size() - 1 ){
+                            fav += User.getInstance().lstMeal.get(i).getId() + ",";
+                        }
+                        else{
+                            fav += User.getInstance().lstMeal.get(i).getId();
+                        }
+
+                    }
+                }
+                u.setFavoriteMeal(fav);
+
+
+
+
+
+
             } catch (Exception e) {
 
             }
