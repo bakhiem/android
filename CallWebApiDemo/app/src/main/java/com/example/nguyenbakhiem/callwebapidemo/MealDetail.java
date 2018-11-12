@@ -204,13 +204,14 @@ public class MealDetail extends AppCompatActivity {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString("token", "");
                 editor.commit();
-                if (!this.getClass().equals(MainActivity.class)) {
+                if (this.getClass().equals(MealDetail.class)) {
+                    Toast.makeText(getApplicationContext(), "Logout successful", Toast.LENGTH_LONG).show();
+                    onRestart();
+                }else if( !this.getClass().equals(MainActivity.class))
+                {
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent);
                     finish();
-                }else
-                {
-                    Toast.makeText(getApplicationContext(), "Logout successful", Toast.LENGTH_LONG).show();
                 }
             }
             else

@@ -52,6 +52,7 @@ public class LoginAcitivity extends AppCompatActivity {
     private User user;
     private boolean typeLogin = true;
     private SharedPreferences preferences;
+    private String activityDes="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +81,9 @@ public class LoginAcitivity extends AppCompatActivity {
                 }
             }
         }
+        if (intent.getStringExtra("mealdetail") != null) {
+            activityDes = intent.getStringExtra("mealdetail").toString();
+        }
 
     }
 
@@ -101,6 +105,19 @@ public class LoginAcitivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
         startActivity(intent);
 
+    }
+    public void directActivity()
+    {
+        Intent intent = getIntent();
+        if (activityDes.trim().length() >0) {
+            setResult(Activity.RESULT_OK, intent);
+            finish();
+        } else {
+            intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
+        Toast.makeText(getApplicationContext(),"Đăng nhập thành công",Toast.LENGTH_LONG).show();
     }
 
     class MyTask extends AsyncTask<String, Void, String> {
@@ -128,16 +145,7 @@ public class LoginAcitivity extends AppCompatActivity {
                     editor.putString("token", s);
                     editor.commit();
                 }
-                Intent intent = getIntent();
-                if (intent.getStringExtra("mealdetail") != null) {
-                    setResult(Activity.RESULT_OK, intent);
-                    Toast.makeText(getApplicationContext(),"Đăng nhập thành công",Toast.LENGTH_LONG).show();
-                    finish();
-                } else {
-                    intent = new Intent(getApplicationContext(), MainActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
+                directActivity();
 
             } else {
                 Toast.makeText(getApplicationContext(), "Sai tên đăng nhập hoặc mật khẩu", Toast.LENGTH_LONG).show();
