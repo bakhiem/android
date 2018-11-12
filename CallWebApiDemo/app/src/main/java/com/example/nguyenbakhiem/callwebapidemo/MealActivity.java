@@ -155,41 +155,41 @@ public class MealActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        menu.add("Search food");
-        menu.add("My favorite food");
+        menu.add("Tìm món ăn");
+        menu.add("Món ăn ưa thích");
         User user = User.getInstance();
         if(user.getStatusLogin() != null && user.getStatusLogin().toLowerCase().equals("ok"))
         {
-            menu.add("Logout");
+            menu.add("Đăng xuất");
         }
         else
         {
-            menu.add("Login");
+            menu.add("Đăng nhập");
         }
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getTitle().equals("Search food")) {
+        if (item.getTitle().equals("Tìm món ăn")) {
             if (!this.getClass().equals(MainActivity.class)) {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
                 finish();
             }
-        } else if (item.getTitle().equals("My favorite food")) {
+        } else if (item.getTitle().equals("Món ăn ưa thích")) {
             if (!this.getClass().equals(FavoriteActivity.class)) {
                 Intent intent = new Intent(getApplicationContext(), FavoriteActivity.class);
                 startActivity(intent);
                 finish();
             }
-        } else if (item.getTitle().equals("Login")) {
+        } else if (item.getTitle().equals("Đăng nhập")) {
             if (!this.getClass().equals(LoginAcitivity.class)) {
                 Intent intent = new Intent(getApplicationContext(), LoginAcitivity.class);
                 startActivity(intent);
                 finish();
             }
-        }else if(item.getTitle().equals("Logout"))
+        }else if(item.getTitle().equals("Đăng xuất"))
         {
             AuthenLogout authenLogout = AuthenLogout.getInstance();
             boolean check = authenLogout.logoutUser();
@@ -205,12 +205,12 @@ public class MealActivity extends AppCompatActivity {
                     finish();
                 }else
                 {
-                    Toast.makeText(getApplicationContext(), "Logout successful", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Đăng xuất thành công", Toast.LENGTH_LONG).show();
                 }
             }
             else
             {
-                Toast.makeText(getApplicationContext(), "You have not sign in yet", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Bạn chưa đăng nhập", Toast.LENGTH_LONG).show();
             }
         }
         return true;
