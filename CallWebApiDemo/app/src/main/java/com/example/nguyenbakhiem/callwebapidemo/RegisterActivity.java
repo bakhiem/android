@@ -100,9 +100,7 @@ public class RegisterActivity extends AppCompatActivity {
             super.onPostExecute(s);
 
             if (s.toLowerCase().trim().length() > 0) {
-                Intent intent = new Intent(getApplicationContext(), LoginAcitivity.class);
-                intent.putExtra("registerSuccess","ok");
-                startActivity(intent);
+                Toast.makeText(getApplicationContext(), "Register Success", Toast.LENGTH_LONG).show();
                 finish();
             } else {
                 Toast.makeText(getApplicationContext(), "Tên đăng nhập đã tồn tại hoặc password lỗi", Toast.LENGTH_LONG).show();

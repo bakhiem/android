@@ -66,7 +66,7 @@ public class LoginAcitivity extends AppCompatActivity {
         //register sang
         Intent intent = getIntent();
         if (intent.getStringExtra("registerSuccess") != null) {
-            Toast.makeText(getApplicationContext(), "Register Success", Toast.LENGTH_LONG).show();
+
         } else {
             //đã register và từng login remember
             if (user.getStatusLogin() == null) {
@@ -100,7 +100,7 @@ public class LoginAcitivity extends AppCompatActivity {
     public void register(View view) {
         Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
         startActivity(intent);
-        finish();
+
     }
 
     class MyTask extends AsyncTask<String, Void, String> {
@@ -123,8 +123,6 @@ public class LoginAcitivity extends AppCompatActivity {
                 user.setStatusLogin("ok");
                 GetFavoriteMeal getFavoriteMeal = GetFavoriteMeal.getInstance();
                 getFavoriteMeal.getFavoriteMeal();
-                user.setName(uName);
-                GetFavoriteMeal.getInstance().getFavoriteMeal();
                 if (cbRemember.isChecked()) {
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putString("token", s);
