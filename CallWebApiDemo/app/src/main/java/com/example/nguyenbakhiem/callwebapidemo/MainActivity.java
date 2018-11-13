@@ -11,6 +11,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.ContextMenu;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -102,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
 
         materialAdapter.update(materialsLv);
         materialAdapter.notifyDataSetChanged();
+        finish();
     }
 
     public int[] getListMealId() {
@@ -285,5 +287,17 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return true;
+    }
+//    @Override
+//    protected void onRestart() {
+//        super.onRestart();
+//        startActivity(getIntent());
+//        finish();
+//    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+       finish();
+        return super.onKeyDown(keyCode, event);
     }
 }

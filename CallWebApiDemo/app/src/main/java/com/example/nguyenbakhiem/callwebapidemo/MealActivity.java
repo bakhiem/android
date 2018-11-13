@@ -45,10 +45,12 @@ public class MealActivity extends AppCompatActivity {
     private TextView txtResult;
     private ListView listView;
     int[] materials;
-    private String materialsReceive ="[";
-    List<Meal> lstMeal ;
+    private String materialsReceive = "[";
+    List<Meal> lstMeal;
     List<String> listSend;
     String[] data;
+    int reload = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,15 +62,12 @@ public class MealActivity extends AppCompatActivity {
         materials = intent.getIntArrayExtra("arrayId");
         listSend = new ArrayList<String>();
         data = new String[materials.length];
-        for(int i = 0; i < materials.length; i++)
-        {
+        for (int i = 0; i < materials.length; i++) {
             //data[i] = ""+ materials[i]+"";
-            materialsReceive += ""+materials[i]+"";
-            if(i < materials.length - 1)
-            {
+            materialsReceive += "" + materials[i] + "";
+            if (i < materials.length - 1) {
                 materialsReceive += ",";
-            }else
-            {
+            } else {
                 materialsReceive += "]";
             }
         }
@@ -102,25 +101,28 @@ public class MealActivity extends AppCompatActivity {
                 jsonArray = new JSONArray(s);
                 Gson gson = new Gson();
 
-                lstMeal = gson.fromJson(s, new TypeToken<List<Meal>>() { }.getType());
-               //MealAdapter mealAdapter = MealAdapter.getInstanceMeal(MealActivity.this, lstMeal);
+                lstMeal = gson.fromJson(s, new TypeToken<List<Meal>>() {
+                }.getType());
+                //MealAdapter mealAdapter = MealAdapter.getInstanceMeal(MealActivity.this, lstMeal);
                 MealAdapter mealAdapter = new MealAdapter(getApplicationContext(), lstMeal);
                 listView.setAdapter(mealAdapter);
-                txtResult.setText(Integer.toString(lstMeal.size())+" kết quả :");
+                txtResult.setText(Integer.toString(lstMeal.size()) + " kết quả :");
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        sendMealtoDetail(lstMeal.get(position)) ;
+                        sendMealtoDetail(lstMeal.get(position));
                     }
                 });
             } catch (Exception e) {
 
             }
         }
-        public void sendMealtoDetail(Meal meal){
-            Intent intent = new Intent(MealActivity.this,MealDetail.class);
-            intent.putExtra("meal",meal);
+
+        public void sendMealtoDetail(Meal meal) {
+            Intent intent = new Intent(MealActivity.this, MealDetail.class);
+            intent.putExtra("meal", meal);
             startActivity(intent);
+            reload = 1;
         }
 
         @Override
@@ -134,7 +136,7 @@ public class MealActivity extends AppCompatActivity {
                 connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
                 JSONArray jsonArray = new JSONArray(Arrays.asList(data));
                 JsonObject jsonObject = new JsonObject();
-                jsonObject.addProperty("list",materialsReceive);
+                jsonObject.addProperty("list", materialsReceive);
                 DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
                 wr.writeBytes(jsonObject.toString());
                 wr.flush();
@@ -159,12 +161,9 @@ public class MealActivity extends AppCompatActivity {
         menu.add("Tìm món ăn");
         menu.add("Món ăn ưa thích");
         User user = User.getInstance();
-        if(user.getStatusLogin() != null && user.getStatusLogin().toLowerCase().equals("ok"))
-        {
+        if (user.getStatusLogin() != null && user.getStatusLogin().toLowerCase().equals("ok")) {
             menu.add("Đăng xuất");
-        }
-        else
-        {
+        } else {
             menu.add("Đăng nhập");
         }
         return super.onCreateOptionsMenu(menu);
@@ -190,12 +189,10 @@ public class MealActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             }
-        }else if(item.getTitle().equals("Đăng xuất"))
-        {
+        } else if (item.getTitle().equals("Đăng xuất")) {
             AuthenLogout authenLogout = AuthenLogout.getInstance();
             boolean check = authenLogout.logoutUser();
-            if(check)
-            {
+            if (check) {
                 SharedPreferences sharedPreferences = getSharedPreferences("tokenLogin", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString("token", "");
@@ -204,41 +201,36 @@ public class MealActivity extends AppCompatActivity {
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent);
                     finish();
-                }else
-                {
+                } else {
                     Toast.makeText(getApplicationContext(), "Đăng xuất thành công", Toast.LENGTH_LONG).show();
                 }
-            }
-            else
-            {
+            } else {
                 Toast.makeText(getApplicationContext(), "Bạn chưa đăng nhập", Toast.LENGTH_LONG).show();
             }
         }
         return true;
     }
+
     @Override
     protected void onRestart() {
         super.onRestart();
         startActivity(getIntent());
         finish();
     }
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(keyCode == KeyEvent.KEYCODE_BACK)
-        {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
 //            //Intent intent = new Intent(getApplicationContext(), FavoriteActivity.class);
 //            Intent intent = getIntent();
-//            if(intent.getStringExtra("favorite") != null)
-//            {
-//                intent = new Intent(getApplicationContext(), FavoriteActivity.class);
-//                startActivity(intent);
-//                finish();
-//            }
-//            else
-//            {
-//                finish();
-//            }
-            onRestart();
+            if (reload == 1) {
+                onRestart();
+            } else {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+
         }
         return super.onKeyDown(keyCode, event);
     }
