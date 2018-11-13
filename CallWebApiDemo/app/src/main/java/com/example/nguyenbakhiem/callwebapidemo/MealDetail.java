@@ -191,8 +191,9 @@ public class MealDetail extends AppCompatActivity {
         } else if (item.getTitle().equals("Đăng nhập")) {
             if (!this.getClass().equals(LoginAcitivity.class)) {
                 Intent intent = new Intent(getApplicationContext(), LoginAcitivity.class);
-                startActivity(intent);
-                finish();
+                intent.putExtra("mealdetail","mealdetailchuyensangnhe:)");
+                startActivityForResult(intent,100);
+                //finish();
             }
         }else if(item.getTitle().equals("Đăng xuất"))
         {

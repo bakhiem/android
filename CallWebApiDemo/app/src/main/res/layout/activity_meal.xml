@@ -5,26 +5,29 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MealActivity"
-    tools:layout_editor_absoluteY="81dp">
+    tools:layout_editor_absoluteY="25dp">
+
+    <TextView
+        android:id="@+id/txtMeal"
+        android:layout_width="203dp"
+        android:layout_height="47dp"
+        android:layout_marginBottom="18dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@string/font_family_medium"
+        android:textSize="28sp"
+        app:layout_constraintBottom_toTopOf="@+id/listViewMeal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ListView
         android:id="@+id/listViewMeal"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="6dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtMeal" />
-
-    <TextView
-        android:id="@+id/txtMeal"
-        android:layout_width="210dp"
-        android:layout_height="73dp"
-        android:layout_marginBottom="16dp"
-        android:textSize="28sp"
-        android:fontFamily="@string/font_family_medium"
-        app:layout_constraintBottom_toTopOf="@+id/listViewMeal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 </android.support.constraint.ConstraintLayout>
