@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -93,17 +94,43 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void searchmeal(View view) {
-        Intent intent = new Intent(getApplicationContext(), MealActivity.class);
-        int[] arrayId = getListMealId();
-        intent.putExtra("arrayId", arrayId);
-        startActivity(intent);
-        //khi quay trở lại sẽ mất list vừa tìm, sẽ như ban đầu
-        materials.addAll(materialsLv);
-        materialsLv.clear();
+        if(materialsLv.size() == 0){
+            AlertDialog.Builder builder;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
+            } else {
+                builder = new AlertDialog.Builder(this);
+            }
+            builder.setTitle(" ")
+                    .setMessage("Bạn chưa chọn nguyên liệu")
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // continue with delete
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // do nothing
+                        }
+                    })
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+        }
+        else{
+            Intent intent = new Intent(getApplicationContext(), MealActivity.class);
+            int[] arrayId = getListMealId();
+            intent.putExtra("arrayId", arrayId);
+            startActivity(intent);
+            //khi quay trở lại sẽ mất list vừa tìm, sẽ như ban đầu
+            materials.addAll(materialsLv);
+            materialsLv.clear();
 
-        materialAdapter.update(materialsLv);
-        materialAdapter.notifyDataSetChanged();
-        finish();
+            materialAdapter.update(materialsLv);
+            materialAdapter.notifyDataSetChanged();
+            finish();
+        }
+
+
     }
 
     public int[] getListMealId() {
