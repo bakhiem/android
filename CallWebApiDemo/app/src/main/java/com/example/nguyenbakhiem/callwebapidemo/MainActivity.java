@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
     }
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-             if(item.getTitle().equals("Delete")){
+             if(item.getTitle().equals("Xóa")){
                 AdapterView.AdapterContextMenuInfo info= (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
                 //final int id = materialsLv.get(info.position).getId();
                  //

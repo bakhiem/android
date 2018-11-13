@@ -105,7 +105,7 @@ public class MealActivity extends AppCompatActivity {
                //MealAdapter mealAdapter = MealAdapter.getInstanceMeal(MealActivity.this, lstMeal);
                 MealAdapter mealAdapter = new MealAdapter(getApplicationContext(), lstMeal);
                 listView.setAdapter(mealAdapter);
-                txtResult.setText(Integer.toString(lstMeal.size())+" results:");
+                txtResult.setText(Integer.toString(lstMeal.size())+" kết quả :");
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

@@ -26,7 +26,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:padding="16dp"
-                    android:text="UserName:"
+                    android:text="Tên đăng nhập:"
                     android:textSize="16sp" />
 
                 <EditText
@@ -46,7 +46,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:padding="16dp"
-                    android:text="Password:"
+                    android:text="Mật khẩu:"
                     android:textSize="16sp" />
 
                 <EditText
@@ -66,7 +66,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:padding="16dp"
-                    android:text="Re-password:"
+                    android:text="Nhập lại mật khẩu:"
                     android:textSize="16sp" />
 
                 <EditText
@@ -105,7 +105,7 @@
             android:layout_below="@id/tl_reg_form"
             android:layout_centerHorizontal="true"
             android:onClick="register"
-            android:text="Register" />
+            android:text="Đăng kí" />
 
     </RelativeLayout>
 
