@@ -76,7 +76,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
             else
             {
-                Toast.makeText(getApplicationContext(), "Password is not match", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Mật khẩu không khớp!", Toast.LENGTH_LONG).show();
             }
         }
 
@@ -100,7 +100,7 @@ public class RegisterActivity extends AppCompatActivity {
             super.onPostExecute(s);
 
             if (s.toLowerCase().trim().length() > 0) {
-                Toast.makeText(getApplicationContext(), "Register Success", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Đăng kí thành công", Toast.LENGTH_LONG).show();
                 finish();
             } else {
                 Toast.makeText(getApplicationContext(), "Tên đăng nhập đã tồn tại hoặc password lỗi", Toast.LENGTH_LONG).show();

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -214,6 +215,32 @@ public class MealActivity extends AppCompatActivity {
             }
         }
         return true;
+    }
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        startActivity(getIntent());
+        finish();
+    }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK)
+        {
+//            //Intent intent = new Intent(getApplicationContext(), FavoriteActivity.class);
+//            Intent intent = getIntent();
+//            if(intent.getStringExtra("favorite") != null)
+//            {
+//                intent = new Intent(getApplicationContext(), FavoriteActivity.class);
+//                startActivity(intent);
+//                finish();
+//            }
+//            else
+//            {
+//                finish();
+//            }
+            onRestart();
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
 }

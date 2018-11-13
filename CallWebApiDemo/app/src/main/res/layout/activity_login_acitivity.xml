@@ -62,7 +62,7 @@
 
         <CheckBox
             android:id="@+id/cbRemember"
-            android:layout_width="159dp"
+            android:layout_width="180dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/tl_login_form"
             android:layout_marginLeft="16dp"
